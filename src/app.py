@@ -91,7 +91,7 @@ def update_product(data, *args):
         print("Operation Canceled!\n")
         return
 
-    product_index = input_int("Select Product To Update:\n>>> ") - 1
+    product_index = input_int(prompt="Select Product To Update:\n>>> ") - 1
     if product_index > len(data):
         os.system("clear")
         print("Invalid Input!\n")
@@ -117,7 +117,7 @@ def delete_product(data, *args):
         print("Operation Canceled!\n")
         return
 
-    product_index = input_int("Select Product To Delete:\n>>> ") - 1
+    product_index = input_int(prompt="Select Product To Delete:\n>>> ") - 1
     if product_index > len(data):
         os.system("clear")
         print("Invalid Input!\n")
