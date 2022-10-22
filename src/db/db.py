@@ -1,8 +1,8 @@
-def create(data, new_product):
-    return data.append(new_product)
+def create(data: list[str], new_product: str) -> None:
+    data.append(new_product)
 
 
-def read(data):
+def read(data: list[str]) -> bool:
     if not data:
         print("No Products Currently Available!\n")
         return False
@@ -15,9 +15,9 @@ def read(data):
     return True
 
 
-def update(data, old_product, new_product):
+def update(data: list[str], old_product: int, new_product: str) -> None:
     data[old_product] = new_product
 
 
-def delete(data, product_index):
+def delete(data: list[str], product_index: int) -> None:
     data.pop(product_index)
