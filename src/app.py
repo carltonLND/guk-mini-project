@@ -4,9 +4,10 @@ import os
 from db.db import create, delete, read, update
 
 
-def input_int(prompt=">>> "):
+def input_int(menu={}, prompt=">>> "):
     while True:
         try:
+            print_menu(menu)
             user_input = int(input(prompt))
         except ValueError:
             os.system("clear")
@@ -16,9 +17,8 @@ def input_int(prompt=">>> "):
 
 
 def confirmation(menu):
-    confirmation = input_int()
+    confirmation = input_int(menu=menu)
     if confirmation not in menu.keys():
-        os.system("clear")
         print("Invalid Input!\n")
         return False
 
@@ -40,8 +40,7 @@ def print_menu(menu):
 
 def command_loop(data, commands, *args):
     while True:
-        print_menu(commands)
-        command = input_int()
+        command = input_int(menu=commands)
         if command not in commands.keys():
             os.system("clear")
             print("Invalid Input!\n")
@@ -85,10 +84,8 @@ def add_product(data, *args):
 
 def update_product(data, *args):
     os.system("clear")
-    product_found = read(data)
-    if not product_found:
-        os.system("clear")
-        print("Operation Canceled!\n")
+    products_found = read(data)
+    if not products_found:
         return
 
     product_index = input_int(prompt="Select Product To Update:\n>>> ") - 1
@@ -99,9 +96,7 @@ def update_product(data, *args):
 
     new_product_name = input(f"\nEnter New Product Name:\n>>> ").strip()
     print(f"\nUpdate '{data[product_index]}' -> '{new_product_name}'?")
-    menu = args[0]["bool_menu"]
-    print_menu(menu)
-    if not confirmation(menu):
+    if not confirmation(args[0]["bool_menu"]):
         return
 
     os.system("clear")
@@ -111,10 +106,8 @@ def update_product(data, *args):
 
 def delete_product(data, *args):
     os.system("clear")
-    product_found = read(data)
-    if not product_found:
-        os.system("clear")
-        print("Operation Canceled!\n")
+    products_found = read(data)
+    if not products_found:
         return
 
     product_index = input_int(prompt="Select Product To Delete:\n>>> ") - 1
@@ -124,10 +117,7 @@ def delete_product(data, *args):
         return
 
     print(f"\nDelete '{data[product_index]}'?")
-
-    menu = args[0]["bool_menu"]
-    print_menu(menu)
-    if not confirmation(menu):
+    if not confirmation(args[0]["bool_menu"]):
         return
 
     os.system("clear")
