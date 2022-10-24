@@ -4,7 +4,7 @@ import os
 from db.db import create, delete, read, update
 
 
-def input_int(menu={}, prompt=">>> "):
+def input_int(data=[], menu={}, prompt=">>> "):
     while True:
         try:
             print_menu(menu)
@@ -12,6 +12,8 @@ def input_int(menu={}, prompt=">>> "):
         except ValueError:
             os.system("clear")
             print("Invalid Input!\n")
+            if data:
+                read(data)
         else:
             return user_input
 
@@ -88,13 +90,19 @@ def update_product(data, *args):
     if not products_found:
         return
 
-    product_index = input_int(prompt="Select Product To Update:\n>>> ") - 1
-    if product_index > len(data):
+    product_index = input_int(data=data, prompt="Select Product To Update:\n>>> ") - 1
+    while product_index > len(data):
         os.system("clear")
         print("Invalid Input!\n")
-        return
+        read(data)
+        product_index = (
+            input_int(data=data, prompt="Select Product To Update:\n>>> ") - 1
+        )
 
-    new_product_name = input(f"\nEnter New Product Name:\n>>> ").strip()
+    os.system("clear")
+    new_product_name = input(
+        f"Enter New Product Name For '{data[product_index].title()}':\n>>> "
+    ).strip()
     print(f"\nUpdate '{data[product_index]}' -> '{new_product_name}'?")
     if not confirmation(args[0]["bool_menu"]):
         return
@@ -110,13 +118,17 @@ def delete_product(data, *args):
     if not products_found:
         return
 
-    product_index = input_int(prompt="Select Product To Delete:\n>>> ") - 1
-    if product_index > len(data):
+    product_index = input_int(data=data, prompt="Select Product To Delete:\n>>> ") - 1
+    while product_index > len(data):
         os.system("clear")
         print("Invalid Input!\n")
-        return
+        read(data)
+        product_index = (
+            input_int(data=data, prompt="Select Product To Delete:\n>>> ") - 1
+        )
 
-    print(f"\nDelete '{data[product_index]}'?")
+    os.system("clear")
+    print(f"Delete '{data[product_index]}'?")
     if not confirmation(args[0]["bool_menu"]):
         return
 
