@@ -91,7 +91,7 @@ def update_product(data, *args):
         return
 
     product_index = input_int(data=data, prompt="Select Product To Update:\n>>> ") - 1
-    while product_index > len(data):
+    while product_index > len(data) - 1:
         os.system("clear")
         print("Invalid Input!\n")
         read(data)
@@ -119,7 +119,7 @@ def delete_product(data, *args):
         return
 
     product_index = input_int(data=data, prompt="Select Product To Delete:\n>>> ") - 1
-    while product_index > len(data):
+    while product_index > len(data) - 1:
         os.system("clear")
         print("Invalid Input!\n")
         read(data)
