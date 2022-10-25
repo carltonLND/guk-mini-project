@@ -1,23 +1,31 @@
-def create(data: list[str], new_product: str) -> None:
-    data.append(new_product)
+import os
+from typing import final
+
+from file_handlers.txt import add_txt_data, get_txt_data
+
+def handler(file):
+    supported_extensions = [".txt"]
+    extension = file[-4:]
+    if extension not in supported_extensions:
+        return print("File Type Not Supported!")
+
+    return extension
 
 
-def read(data: list[str]) -> bool:
-    if not data:
-        print("No Products Currently Available!\n")
-        return False
-
-    print("Products:")
-    for index, product in enumerate(data, 1):
-        print(f"{index}) {product.title()}")
-
-    print()
-    return True
+def create_data(file, new_entry):
+    return add_txt_data(file, new_entry)
 
 
-def update(data: list[str], old_product: int, new_product: str) -> None:
-    data[old_product] = new_product
+def get_data(file):
+    file_type = handler(file)
+    if file_type == ".txt":
+        return get_txt_data(file)
+    return
 
 
-def delete(data: list[str], product_index: int) -> None:
-    data.pop(product_index)
+def update_data(old_element: int, new_element):
+    data[old_element] = new_element
+
+
+def delete_data(element_index: int):
+    data.pop(element_index)

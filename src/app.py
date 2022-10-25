@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import os
 
-from db.db import create, delete, read, update
+from file_handlers.txt import format_txt_data
+from db.db import create_data, delete_data, get_data, update_data
 
 
-def input_int(data=[], menu={}, prompt=">>> "):
+def input_int(data="", menu={}, prompt=">>> "):
     while True:
         try:
             print_menu(menu)
@@ -12,8 +13,9 @@ def input_int(data=[], menu={}, prompt=">>> "):
         except ValueError:
             os.system("clear")
             print("Invalid Input!\n")
-            if data:
-                read(data)
+            if not data:
+                continue
+            get_data(data)
         else:
             return user_input
 
@@ -40,7 +42,7 @@ def print_menu(menu):
         print(f"{option}) {command}")
 
 
-def command_loop(data, commands, *args):
+def command_loop(commands, *args):
     while True:
         command = input_int(menu=commands)
         if command not in commands.keys():
@@ -53,25 +55,30 @@ def command_loop(data, commands, *args):
             return
 
         os.system("clear")
-        commands[command](data, *args)
+        commands[command](*args)
 
 
-def start_application(data, *args):
+def start_application(*args):
     menu = args[0]["product_menu"]
-    command_loop(data, menu, *args)
+    command_loop(menu, *args)
 
 
-def main_menu(data, *args):
+def main_menu(*args):
     menu = args[0]["main_menu"]
-    command_loop(data, menu, *args)
+    command_loop(menu, *args)
 
 
-def get_products(data, *_):
+def get_products(*_):
     os.system("clear")
-    read(data)
+    products = get_data("products.txt")
+    if not products:
+        return print("No Products Currently Available!")
+    print("Data:")
+    for product in products:
 
 
-def add_product(data, *args):
+
+def add_product():
     os.system("clear")
     new_product = input("Enter Product Name:\n>>> ").strip()
     if not new_product:
@@ -79,24 +86,24 @@ def add_product(data, *args):
         print("Operation Canceled!\n")
         return
 
-    create(data, new_product)
+    create_data("products.txt", new_product)
     os.system("clear")
     print(f"New Product: {new_product}!\n")
 
 
-def update_product(data, *args):
+def update_product(*args):
     os.system("clear")
-    products_found = read(data)
+    products_found = get_data("products.txt")
     if not products_found:
         return
 
-    product_index = input_int(data=data, prompt="Select Product To Update:\n>>> ") - 1
-    while product_index > len(data) - 1:
+    product_index = input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
+    while product_index > len("products.txt") - 1:
         os.system("clear")
         print("Invalid Input!\n")
-        read(data)
+        get_data("products.txt")
         product_index = (
-            input_int(data=data, prompt="Select Product To Update:\n>>> ") - 1
+            input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
         )
 
     os.system("clear")
@@ -109,20 +116,20 @@ def update_product(data, *args):
 
     os.system("clear")
     print("Product Name Updated!\n")
-    update(data, product_index, new_product_name)
+    update_data(data, product_index, new_product_name)
 
 
-def delete_product(data, *args):
+def delete_product(*args):
     os.system("clear")
-    products_found = read(data)
+    products_found = get_data()
     if not products_found:
         return
 
-    product_index = input_int(data=data, prompt="Select Product To Delete:\n>>> ") - 1
+    product_index = input_int(prompt="Select Product To Delete:\n>>> ") - 1
     while product_index > len(data) - 1:
         os.system("clear")
         print("Invalid Input!\n")
-        read(data)
+        get_data()
         product_index = (
             input_int(data=data, prompt="Select Product To Delete:\n>>> ") - 1
         )
@@ -134,7 +141,23 @@ def delete_product(data, *args):
 
     os.system("clear")
     print("Product Deleted!\n")
-    delete(data, product_index)
+    delete_data(product_index)
+
+
+def get_couriers():
+    pass
+
+
+def add_courier():
+    pass
+
+
+def update_courier():
+    pass
+
+
+def delete_courier():
+    pass
 
 
 if __name__ == "__main__":
@@ -147,11 +170,18 @@ if __name__ == "__main__":
             4: delete_product,
             0: main_menu,
         },
+        "courier_menu": {
+            1: get_couriers,
+            2: add_courier,
+            3: update_courier,
+            4: delete_product,
+            0: main_menu,
+        },
         "bool_menu": {1: "Confirm", 0: "Cancel"},
     }
 
     # Non persistant data
-    data = []
 
-    main_menu(data, MENUS)
+    format_txt_data()
+    main_menu(MENUS)
     print("Exiting Application...")
