@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import os
 
-from file_handlers.txt import format_txt_data
 from db.db import create_data, delete_data, get_data, update_data
+from file_handlers.txt import format_txt_data
 
 
 def input_int(data="", menu={}, prompt=">>> "):
@@ -75,7 +75,8 @@ def get_products(*_):
         return print("No Products Currently Available!")
     print("Data:")
     for product in products:
-
+        print(product)
+    print()
 
 
 def add_product():
@@ -97,7 +98,9 @@ def update_product(*args):
     if not products_found:
         return
 
-    product_index = input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
+    product_index = (
+        input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
+    )
     while product_index > len("products.txt") - 1:
         os.system("clear")
         print("Invalid Input!\n")

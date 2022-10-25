@@ -25,8 +25,7 @@ def get_txt_data(file):
         return False
 
     with open(os.path.join(os.getcwd(), f"data/{flist[findex]}"), "r") as f:
-        for count, line in enumerate(f.readlines(), 1):
-            yield f"{count}) {line.strip().title()}"
+        return [line for line in f.readlines()]
 
 
 def add_txt_data(file, new_entry):
