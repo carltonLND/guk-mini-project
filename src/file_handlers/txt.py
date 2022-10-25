@@ -1,16 +1,15 @@
 import os
 
-cwd = os.getcwd()
-data_dir = os.path.join(cwd, "data/")
+data_dir = os.path.join(os.getcwd(), "data/")
+txt_files = list(filter(lambda x: x.endswith(".txt"), os.listdir(data_dir)))
 
 
 def format_txt_data():
-    flist = list(filter(lambda x: x.endswith(".txt"), os.listdir(data_dir)))
-    for file in flist:
-        with open(os.path.join(cwd, f"data/{file}"), "r") as f:
+    for file in txt_files:
+        with open(data_dir + file, "r") as f:
             lines = f.readlines()
 
-        with open(os.path.join(cwd, f"data/{file}"), "w") as f:
+        with open(data_dir + file, "w") as f:
             for line in lines:
                 if line.isspace():
                     pass
@@ -19,20 +18,56 @@ def format_txt_data():
 
 
 def get_txt_data(file):
-    flist = list(filter(lambda x: x.endswith(".txt"), os.listdir(data_dir)))
-    findex = flist.index(f"{file}")
-    if not file:
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
         return False
 
-    with open(os.path.join(os.getcwd(), f"data/{flist[findex]}"), "r") as f:
-        return [line for line in f.readlines()]
+    with open(data_dir + file, "r") as f:
+        return [line.strip() for line in f.readlines()]
 
 
 def add_txt_data(file, new_entry):
-    flist = list(filter(lambda x: x.endswith(".txt"), os.listdir(data_dir)))
-    findex = flist.index(f"{file}")
-    if not file:
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
         return False
 
-    with open(os.path.join(cwd, f"data/{flist[findex]}", "w")) as f:
-        f.write(f"\r{new_entry}")
+    with open(data_dir + file, "a") as f:
+        f.write(f"{new_entry}\n")
+
+    return True
+
+
+def update_txt_data(file, old_line, new_line):
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
+        return False
+
+    with open(data_dir + file, "r") as f:
+        lines = f.readlines()
+
+    with open(data_dir + file, "w") as f:
+        for count, line in enumerate(lines):
+            if count == old_line:
+                f.write(line.replace(line, f"{new_line}\n"))
+            else:
+                f.write(line)
+
+    return True
+
+
+def delete_txt_data(file, data_to_delete):
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
+        return False
+
+    with open(data_dir + file, "r") as f:
+        lines = f.readlines()
+
+    with open(data_dir + file, "w") as f:
+        for count, line in enumerate(lines):
+            if count == data_to_delete:
+                pass
+            else:
+                f.write(line)
+
+    return True
