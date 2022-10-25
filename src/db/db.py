@@ -1,5 +1,4 @@
 import os
-from typing import final
 
 from file_handlers.txt import add_txt_data, get_txt_data
 
@@ -13,7 +12,9 @@ def handler(file):
 
 
 def create_data(file, new_entry):
-    return add_txt_data(file, new_entry)
+    file_type = handler(file)
+    if file_type == ".txt":
+        return add_txt_data(file, new_entry)
 
 
 def get_data(file):
