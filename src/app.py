@@ -5,12 +5,12 @@ from db.db import create_data, delete_data, get_data, update_data
 from file_handlers.txt import format_txt_data
 
 
-def main_menu(menu_dict):
-    menu = menu_dict["main_menu"]
-    command_loop(menu, menu_dict)
+def main_menu():
+    os.system("clear")
+    command_loop(MENUS["main_menu"])
 
 
-def command_loop(commands, menu_dict):
+def command_loop(commands):
     while True:
         command = input_int(menu=commands)
         if command not in commands.keys():
@@ -19,11 +19,10 @@ def command_loop(commands, menu_dict):
             continue
 
         if command == 0:
-            os.system("clear")
-            return
+            return os.system("clear")
 
         os.system("clear")
-        commands[command](menu_dict)
+        commands[command]()
 
 
 def print_menu(menu):
@@ -73,9 +72,8 @@ def confirmation(menu):
     return True
 
 
-def manage_products(menu_dict):
-    menu = menu_dict["product_menu"]
-    command_loop(menu, menu_dict)
+def manage_products():
+    command_loop(MENUS["product_menu"])
 
 
 def get_products(*_):
@@ -95,7 +93,7 @@ def add_product(*_):
     print(f"New Product: {new_product}!\n")
 
 
-def update_product(menu_dict):
+def update_product():
     os.system("clear")
     products = get_data("products.txt")
     if not products:
@@ -119,7 +117,7 @@ def update_product(menu_dict):
         f"Enter New Product Name For '{products[product_index].title()}':\n>>> "
     ).strip()
     print(f"\nUpdate '{products[product_index]}' -> '{new_product_name}'?")
-    if not confirmation(menu_dict["bool_menu"]):
+    if not confirmation(MENUS["bool_menu"]):
         return
 
     os.system("clear")
@@ -127,7 +125,7 @@ def update_product(menu_dict):
     update_data("products.txt", product_index, new_product_name)
 
 
-def delete_product(menu_dict):
+def delete_product():
     os.system("clear")
     products = get_data("products.txt")
     if not products:
@@ -148,7 +146,7 @@ def delete_product(menu_dict):
 
     os.system("clear")
     print(f"Delete '{products[product_index]}'?\n")
-    if not confirmation(menu_dict["bool_menu"]):
+    if not confirmation(MENUS["bool_menu"]):
         return
 
     os.system("clear")
@@ -156,9 +154,9 @@ def delete_product(menu_dict):
     delete_data("products.txt", product_index)
 
 
-def manage_couriers(menu_dict):
-    menu = menu_dict["courier_menu"]
-    command_loop(menu, menu_dict)
+def manage_couriers():
+    menu = MENUS["courier_menu"]
+    command_loop(menu)
 
 
 def get_couriers(*_):
@@ -178,7 +176,7 @@ def add_courier(*_):
     print(f"New Courier: {new_courier}!\n")
 
 
-def update_courier(menu_dict):
+def update_courier():
     os.system("clear")
     couriers = get_data("couriers.txt")
     if not couriers:
@@ -202,7 +200,7 @@ def update_courier(menu_dict):
         f"Enter New Courier Name For '{couriers[courier_index].title()}':\n>>> "
     ).strip()
     print(f"\nUpdate '{couriers[courier_index]}' -> '{new_product_name}'?")
-    if not confirmation(menu_dict["bool_menu"]):
+    if not confirmation(MENUS["bool_menu"]):
         return
 
     os.system("clear")
@@ -210,7 +208,7 @@ def update_courier(menu_dict):
     update_data("couriers.txt", courier_index, new_product_name)
 
 
-def delete_courier(menu_dict):
+def delete_courier():
     os.system("clear")
     couriers = get_data("couriers.txt")
     if not couriers:
@@ -231,7 +229,7 @@ def delete_courier(menu_dict):
 
     os.system("clear")
     print(f"Delete '{couriers[courier_index]}'?\n")
-    if not confirmation(menu_dict["bool_menu"]):
+    if not confirmation(MENUS["bool_menu"]):
         return
 
     os.system("clear")
@@ -239,26 +237,26 @@ def delete_courier(menu_dict):
     delete_data("couriers.txt", courier_index)
 
 
-if __name__ == "__main__":
-    MENUS = {
-        "main_menu": {1: manage_products, 2: manage_couriers, 0: "Exit Application"},
-        "product_menu": {
-            1: get_products,
-            2: add_product,
-            3: update_product,
-            4: delete_product,
-            0: main_menu,
-        },
-        "courier_menu": {
-            1: get_couriers,
-            2: add_courier,
-            3: update_courier,
-            4: delete_courier,
-            0: main_menu,
-        },
-        "bool_menu": {1: "Confirm", 0: "Cancel"},
-    }
+MENUS = {
+    "main_menu": {1: manage_products, 2: manage_couriers, 0: "Exit Application"},
+    "product_menu": {
+        1: get_products,
+        2: add_product,
+        3: update_product,
+        4: delete_product,
+        0: main_menu,
+    },
+    "courier_menu": {
+        1: get_couriers,
+        2: add_courier,
+        3: update_courier,
+        4: delete_courier,
+        0: main_menu,
+    },
+    "bool_menu": {1: "Confirm", 0: "Cancel"},
+}
 
-    format_txt_data()
-    main_menu(MENUS)
+if __name__ == "__main__":
+    main_menu()
     print("Exiting Application...")
+    format_txt_data()
