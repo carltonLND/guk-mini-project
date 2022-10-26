@@ -1,6 +1,7 @@
 import os
+import pathlib
 
-data_dir = os.path.join(os.getcwd(), "data/")
+data_dir = os.path.join(pathlib.Path(os.getcwd()).parent, "data/")
 txt_files = list(filter(lambda x: x.endswith(".txt"), os.listdir(data_dir)))
 
 
