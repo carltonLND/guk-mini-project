@@ -10,10 +10,10 @@ def main_menu():
     command_loop(MENUS["main_menu"])
 
 
-def command_loop(commands):
+def command_loop(menu):
     while True:
-        command = input_int(menu=commands)
-        if command not in commands.keys():
+        command = input_int(menu=menu)
+        if command not in menu.keys():
             os.system("clear")
             print("Invalid Input!\n")
             continue
@@ -22,7 +22,7 @@ def command_loop(commands):
             return os.system("clear")
 
         os.system("clear")
-        commands[command]()
+        menu[command]()
 
 
 def print_menu(menu):
