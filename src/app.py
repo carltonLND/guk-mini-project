@@ -2,7 +2,6 @@
 import os
 
 from db.db import create_data, delete_data, get_data, update_data
-from file_handlers.txt import format_txt_data
 
 
 def main_menu():
@@ -259,4 +258,3 @@ MENUS = {
 if __name__ == "__main__":
     main_menu()
     print("Exiting Application...")
-    format_txt_data()

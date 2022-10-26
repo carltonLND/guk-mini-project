@@ -55,6 +55,7 @@ def update_txt_data(file, old_line, new_line):
             else:
                 f.write(line)
 
+    format_txt_data()
     return True
 
 
@@ -73,4 +74,5 @@ def delete_txt_data(file, data_to_delete):
             else:
                 f.write(line)
 
+    format_txt_data()
     return True
