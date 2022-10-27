@@ -20,7 +20,7 @@ def format_txt_data():
                     f.write(line)
 
 
-def get_txt_data(file):
+def get_file_data(file):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 
@@ -28,7 +28,7 @@ def get_txt_data(file):
         return [line.strip() for line in f.readlines()]
 
 
-def get_multi_txt_data(file):
+def get_multi_data(file):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 
@@ -45,7 +45,7 @@ def get_multi_txt_data(file):
     return orders
 
 
-def add_txt_data(file, new_entry):
+def add_file_data(file, new_entry):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 
@@ -55,7 +55,7 @@ def add_txt_data(file, new_entry):
     return True
 
 
-def add_multi_txt_data(file, new_entrys):
+def add_multi_data(file, new_entrys):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 
@@ -66,7 +66,7 @@ def add_multi_txt_data(file, new_entrys):
         f.writelines(lines)
 
 
-def update_txt_data(file, old_line, new_line):
+def update_file_data(file, old_line, new_line):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 
@@ -84,7 +84,7 @@ def update_txt_data(file, old_line, new_line):
     return True
 
 
-def delete_txt_data(file, data_to_delete):
+def delete_file_data(file, data_to_delete):
     if file not in txt_files:
         raise SystemExit(f"ERROR: {file} Not Found!")
 

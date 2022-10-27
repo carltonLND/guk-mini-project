@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-from db.db import create_data, delete_data, get_data, update_data
+import db.db as db
 
 
 def create_data_display(data_file, data="Data"):
@@ -11,7 +11,7 @@ def create_data_display(data_file, data="Data"):
         os.system("clear")
         return print("Operation Canceled!\n")
 
-    create_data(data_file, item)
+    db.create_data(data_file, item)
     os.system("clear")
     print(f"New {data}: {item}!\n")
 
@@ -29,14 +29,14 @@ def create_multi_data_display(prompts, data_file, data="Data", **kwargs):
     for key, value in kwargs.items():
         items[key] = value
 
-    create_data(data_file, items, multi=True)
+    db.create_data(data_file, items, multi=True)
     os.system("clear")
     print(f"{data} Added!\n")
 
 
 def update_data_display(data_file, data="Data"):
     os.system("clear")
-    items = get_data(data_file)
+    items = db.get_data(data_file)
     if not items:
         return print("No Data Currently Available!\n")
 
@@ -60,12 +60,12 @@ def update_data_display(data_file, data="Data"):
 
     os.system("clear")
     print(f"{data} Name Updated!\n")
-    update_data(data_file, item_index, new_item)
+    db.update_data(data_file, item_index, new_item)
 
 
 def delete_data_display(data_file, data="Data"):
     os.system("clear")
-    items = get_data(data_file)
+    items = db.get_data(data_file)
     if not items:
         return print("No Data Currently Available!\n")
 
@@ -86,7 +86,7 @@ def delete_data_display(data_file, data="Data"):
 
     os.system("clear")
     print(f"{data} Deleted!\n")
-    delete_data(data_file, item_index)
+    db.delete_data(data_file, item_index)
 
 
 def main_menu():
@@ -136,7 +136,7 @@ def input_int(data="", menu={}, prompt=">>> "):
             print("Invalid Input!\n")
             if not data:
                 continue
-            print_data(get_data(data))
+            print_data(db.get_data(data))
         else:
             return user_input
 
@@ -162,7 +162,7 @@ def manage_orders():
 
 def get_orders(*_):
     os.system("clear")
-    print_data(get_data("orders.txt", multi=True))
+    print_data(db.get_data("orders.txt", multi=True))
 
 
 def create_order(*_):
@@ -188,7 +188,7 @@ def manage_products():
 
 def get_products(*_):
     os.system("clear")
-    print_data(get_data("products.txt"))
+    print_data(db.get_data("products.txt"))
 
 
 def add_product(*_):
@@ -210,7 +210,7 @@ def manage_couriers():
 
 def get_couriers(*_):
     os.system("clear")
-    print_data(get_data("couriers.txt"))
+    print_data(db.get_data("couriers.txt"))
 
 
 def add_courier(*_):
@@ -256,6 +256,7 @@ MENUS = {
     },
     "bool_menu": {1: "Confirm", 0: "Cancel"},
 }
+
 
 if __name__ == "__main__":
     main_menu()
