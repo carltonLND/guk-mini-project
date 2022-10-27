@@ -23,16 +23,30 @@ def format_txt_data():
 def get_txt_data(file):
     if file not in txt_files:
         raise Exception(f"ERROR: {file} Not Found!")
-        return False
 
     with open(data_dir + file, "r") as f:
         return [line.strip() for line in f.readlines()]
 
 
+def get_multi_txt_data(file):
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
+
+    with open(data_dir + file, "r") as f:
+        lines = [line.strip() for line in f.readlines()]
+        orders = []
+        start = 0
+        stop = 4
+        while stop <= len(lines):
+            orders.append("\n   ".join(lines[start:stop]))
+            start += 4
+            stop += 4
+        return orders
+
+
 def add_txt_data(file, new_entry):
     if file not in txt_files:
         raise Exception(f"ERROR: {file} Not Found!")
-        return False
 
     with open(data_dir + file, "a") as f:
         f.write(f"{new_entry}\n")
@@ -40,10 +54,20 @@ def add_txt_data(file, new_entry):
     return True
 
 
+def add_multi_txt_data(file, new_entrys):
+    if file not in txt_files:
+        raise Exception(f"ERROR: {file} Not Found!")
+
+    with open(data_dir + file, "a") as f:
+        lines = []
+        for key, value in new_entrys.items():
+            lines.append(f"{key}: {value}\n")
+        f.writelines(lines)
+
+
 def update_txt_data(file, old_line, new_line):
     if file not in txt_files:
         raise Exception(f"ERROR: {file} Not Found!")
-        return False
 
     with open(data_dir + file, "r") as f:
         lines = f.readlines()
@@ -62,7 +86,6 @@ def update_txt_data(file, old_line, new_line):
 def delete_txt_data(file, data_to_delete):
     if file not in txt_files:
         raise Exception(f"ERROR: {file} Not Found!")
-        return False
 
     with open(data_dir + file, "r") as f:
         lines = f.readlines()

@@ -4,6 +4,91 @@ import os
 from db.db import create_data, delete_data, get_data, update_data
 
 
+def create_data_display(data_file, data="Data"):
+    os.system("clear")
+    item = input(f"Enter {data} Name:\n>>> ").strip()
+    if not item:
+        os.system("clear")
+        return print("Operation Canceled!\n")
+
+    create_data(data_file, item)
+    os.system("clear")
+    print(f"New {data}: {item}!\n")
+
+
+def create_multi_data_display(prompts, data_file, data="Data", **kwargs):
+    os.system("clear")
+    items = {}
+    for prompt in prompts:
+        items[prompt] = input(f"Enter Your {prompt}:\n>>> ")
+
+    if not items:
+        os.system("clear")
+        return print("Operation Canceled!\n")
+
+    for key, value in kwargs.items():
+        items[key] = value
+
+    create_data(data_file, items, multi=True)
+    os.system("clear")
+    print(f"{data} Added!\n")
+
+
+def update_data_display(data_file, data="Data"):
+    os.system("clear")
+    items = get_data(data_file)
+    if not items:
+        return print("No Data Currently Available!\n")
+
+    print_data(items)
+    item_index = input_int(data=data_file, prompt=f"Select {data} To Update:\n>>> ") - 1
+    while item_index not in range(len(items)):
+        os.system("clear")
+        print("Invalid Input!\n")
+        print_data(items)
+        item_index = (
+            input_int(data=data_file, prompt=f"Select {data} To Update:\n>>> ") - 1
+        )
+
+    os.system("clear")
+    new_item = input(
+        f"Enter New {data} Name For '{items[item_index].title()}':\n>>> "
+    ).strip()
+    print(f"\nUpdate '{items[item_index]}' -> '{new_item}'?")
+    if not confirmation(MENUS["bool_menu"]):
+        return
+
+    os.system("clear")
+    print(f"{data} Name Updated!\n")
+    update_data(data_file, item_index, new_item)
+
+
+def delete_data_display(data_file, data="Data"):
+    os.system("clear")
+    items = get_data(data_file)
+    if not items:
+        return print("No Data Currently Available!\n")
+
+    print_data(items)
+    item_index = input_int(data=data_file, prompt=f"Select {data} To Delete:\n>>> ") - 1
+    while item_index not in range(len(items)):
+        os.system("clear")
+        print("Invalid Input!\n")
+        print_data(items)
+        item_index = (
+            input_int(data=data_file, prompt=f"Select {data} To Delete:\n>>> ") - 1
+        )
+
+    os.system("clear")
+    print(f"Delete '{items[item_index]}'?\n")
+    if not confirmation(MENUS["bool_menu"]):
+        return
+
+    os.system("clear")
+    print(f"{data} Deleted!\n")
+    delete_data(data_file, item_index)
+
+
 def main_menu():
     os.system("clear")
     command_loop(MENUS["main_menu"])
@@ -71,6 +156,32 @@ def confirmation(menu):
     return True
 
 
+def manage_orders():
+    command_loop((MENUS["order_menu"]))
+
+
+def get_orders(*_):
+    os.system("clear")
+    print_data(get_data("orders.txt", multi=True))
+
+
+def create_order(*_):
+    prompts = ["Name", "Address", "Phone"]
+    create_multi_data_display(prompts, "orders.txt", data="Order", status="Preparing")
+
+
+def update_order_status():
+    pass
+
+
+def update_order_details():
+    pass
+
+
+def delete_order():
+    pass
+
+
 def manage_products():
     command_loop(MENUS["product_menu"])
 
@@ -81,76 +192,15 @@ def get_products(*_):
 
 
 def add_product(*_):
-    os.system("clear")
-    new_product = input("Enter Product Name:\n>>> ").strip()
-    if not new_product:
-        os.system("clear")
-        return print("Operation Canceled!\n")
-
-    create_data("products.txt", new_product)
-    os.system("clear")
-    print(f"New Product: {new_product}!\n")
+    create_data_display("products.txt", data="Product")
 
 
 def update_product():
-    os.system("clear")
-    products = get_data("products.txt")
-    if not products:
-        return print("No Data Currently Available!\n")
-
-    print_data(products)
-    product_index = (
-        input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
-    )
-
-    while product_index not in range(len(products)):
-        os.system("clear")
-        print("Invalid Input!\n")
-        print_data(products)
-        product_index = (
-            input_int(data="products.txt", prompt="Select Product To Update:\n>>> ") - 1
-        )
-
-    os.system("clear")
-    new_product_name = input(
-        f"Enter New Product Name For '{products[product_index].title()}':\n>>> "
-    ).strip()
-    print(f"\nUpdate '{products[product_index]}' -> '{new_product_name}'?")
-    if not confirmation(MENUS["bool_menu"]):
-        return
-
-    os.system("clear")
-    print("Product Name Updated!\n")
-    update_data("products.txt", product_index, new_product_name)
+    update_data_display("products.txt", data="Product")
 
 
 def delete_product():
-    os.system("clear")
-    products = get_data("products.txt")
-    if not products:
-        return print("No Data Currently Available!\n")
-
-    print_data(products)
-    product_index = (
-        input_int(data="products.txt", prompt="Select Product To Delete:\n>>> ") - 1
-    )
-
-    while product_index not in range(len(products)):
-        os.system("clear")
-        print("Invalid Input!\n")
-        print_data(products)
-        product_index = (
-            input_int(data="products.txt", prompt="Select Product To Delete:\n>>> ") - 1
-        )
-
-    os.system("clear")
-    print(f"Delete '{products[product_index]}'?\n")
-    if not confirmation(MENUS["bool_menu"]):
-        return
-
-    os.system("clear")
-    print("Product Deleted!\n")
-    delete_data("products.txt", product_index)
+    delete_data_display("products.txt", data="Product")
 
 
 def manage_couriers():
@@ -164,85 +214,37 @@ def get_couriers(*_):
 
 
 def add_courier(*_):
-    os.system("clear")
-    new_courier = input("Enter Courier Name:\n>>> ").strip()
-    if not new_courier:
-        os.system("clear")
-        return print("Operation Canceled!\n")
-
-    create_data("couriers.txt", new_courier)
-    os.system("clear")
-    print(f"New Courier: {new_courier}!\n")
+    create_data_display("couriers.txt", data="Courier")
 
 
 def update_courier():
-    os.system("clear")
-    couriers = get_data("couriers.txt")
-    if not couriers:
-        return print("No Data Currently Available!\n")
-
-    print_data(couriers)
-    courier_index = (
-        input_int(data="couriers.txt", prompt="Select Product To Update:\n>>> ") - 1
-    )
-
-    while courier_index not in range(len(couriers)):
-        os.system("clear")
-        print("Invalid Input!\n")
-        print_data(couriers)
-        courier_index = (
-            input_int(data="couriers.txt", prompt="Select Product To Update:\n>>> ") - 1
-        )
-
-    os.system("clear")
-    new_product_name = input(
-        f"Enter New Courier Name For '{couriers[courier_index].title()}':\n>>> "
-    ).strip()
-    print(f"\nUpdate '{couriers[courier_index]}' -> '{new_product_name}'?")
-    if not confirmation(MENUS["bool_menu"]):
-        return
-
-    os.system("clear")
-    print("Courier Name Updated!\n")
-    update_data("couriers.txt", courier_index, new_product_name)
+    update_data_display("couriers.txt", data="Courier")
 
 
 def delete_courier():
-    os.system("clear")
-    couriers = get_data("couriers.txt")
-    if not couriers:
-        return print("No Data Currently Available!\n")
-
-    print_data(couriers)
-    courier_index = (
-        input_int(data="couriers.txt", prompt="Select Product To Delete:\n>>> ") - 1
-    )
-
-    while courier_index not in range(len(couriers)):
-        os.system("clear")
-        print("Invalid Input!\n")
-        print_data(couriers)
-        courier_index = (
-            input_int(data="couriers.txt", prompt="Select Product To Delete:\n>>> ") - 1
-        )
-
-    os.system("clear")
-    print(f"Delete '{couriers[courier_index]}'?\n")
-    if not confirmation(MENUS["bool_menu"]):
-        return
-
-    os.system("clear")
-    print("Courier Deleted!\n")
-    delete_data("couriers.txt", courier_index)
+    delete_data_display("couriers.txt", data="Courier")
 
 
 MENUS = {
-    "main_menu": {1: manage_products, 2: manage_couriers, 0: "Exit Application"},
+    "main_menu": {
+        1: manage_orders,
+        2: manage_products,
+        3: manage_couriers,
+        0: "Exit Application",
+    },
     "product_menu": {
         1: get_products,
         2: add_product,
         3: update_product,
         4: delete_product,
+        0: main_menu,
+    },
+    "order_menu": {
+        1: get_orders,
+        2: create_order,
+        3: update_order_status,
+        4: update_order_details,
+        5: delete_order,
         0: main_menu,
     },
     "courier_menu": {

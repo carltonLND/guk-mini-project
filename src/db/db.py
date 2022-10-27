@@ -1,8 +1,10 @@
 import os
 
 from file_handlers.txt import (
+    add_multi_txt_data,
     add_txt_data,
     delete_txt_data,
+    get_multi_txt_data,
     get_txt_data,
     update_txt_data,
 )
@@ -17,17 +19,24 @@ def handler(file):
     return extension
 
 
-def create_data(file, new_entry):
+def create_data(file, new_entry, multi=False):
     file_type = handler(file)
+    if multi:
+        if file_type == ".txt":
+            return add_multi_txt_data(file, new_entry)
+
     if file_type == ".txt":
         return add_txt_data(file, new_entry)
 
 
-def get_data(file):
+def get_data(file, multi=False):
     file_type = handler(file)
+    if multi:
+        if file_type == ".txt":
+            return get_multi_txt_data(file)
+
     if file_type == ".txt":
         return get_txt_data(file)
-    return
 
 
 def update_data(file, old_name, new_name):
