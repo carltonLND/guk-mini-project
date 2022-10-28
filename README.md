@@ -21,7 +21,7 @@ A **hopefully** somewhat simple CLI application to manage and track orders.
 git clone https://github.com/carltonLND/guk-mini-project.git cafe-cli/
 cd cafe-cli
 ```
-##### Pip Users
+##### Pip Users:
 ```
 python3 -m venv <env>
 source ./<env>/bin/activate
