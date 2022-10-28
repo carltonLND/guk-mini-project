@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-import db.db as db
+from db import db
 
 
 def create_data_display(data_file, data="Data"):
