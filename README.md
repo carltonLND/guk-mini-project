@@ -20,13 +20,15 @@ A **hopefully** somewhat simple CLI application to manage and track orders.
 ```
 git clone https://github.com/carltonLND/guk-mini-project.git cafe-cli/
 cd cafe-cli
-
-// Pip users:
+```
+##### Pip Users
+```
 python3 -m venv <env>
 source ./<env>/bin/activate
 pip install -r requirements.txt
-
-// Conda users:
+```
+##### Conda Users:
+```
 conda create --name <env> --file requirements.txt
 conda activate <env>
 ```
