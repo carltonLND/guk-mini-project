@@ -171,15 +171,15 @@ def create_order(*_):
 
 
 def update_order_status():
-    pass
+    print("Not Yet Implemented\n")
 
 
 def update_order_details():
-    pass
+    print("Not Yet Implemented\n")
 
 
 def delete_order():
-    pass
+    print("Not Yet Implemented\n")
 
 
 def manage_products():
