@@ -1,8 +1,14 @@
+#!/usr/bin/env python3
 import os
 
 from rich.console import Console
+from rich.theme import Theme
 
-console = Console()
+console = Console(
+    theme=Theme(
+        {"base": "#FDF1D6", "notify": "#C39E5C", "warn": "#DA723C", "error": "#EB1D36"}
+    )
+)
 
 
 class Menu:
@@ -13,13 +19,12 @@ class Menu:
         while True:
             self.print_menu()
             cmd = self.prompt()
-            if cmd not in self.options.keys():
-                if cmd == "0":
-                    os.system("clear")
-                    break
+            if cmd == "0":
+                break
 
+            if cmd not in self.options.keys():
                 os.system("clear")
-                console.print("Invalid Option!\n", style="yellow")
+                console.print("Invalid Option!\n", style="warn")
                 continue
 
             os.system("clear")
@@ -31,12 +36,13 @@ class Menu:
             if callable(opt):
                 opt = opt.__name__.replace("_", " ").title()
 
-            console.print(f"{cmd}) {opt}")
-        console.print(f"0) Return")
+            console.print(f"[notify]{cmd})[/notify] [base]{opt}[/base]")
+        if "0" not in self.options.keys():
+            console.print(f"[notify]0)[/notify] [base]Return[/base]")
 
     @staticmethod
     def prompt():
-        return console.input("[yellow]>>>[/yellow] ")
+        return console.input("[notify]>>>[/notify] ")
 
 
 class MainMenu(Menu):
@@ -46,25 +52,26 @@ class MainMenu(Menu):
             "2": self.manage_products,
             "3": self.manage_couriers,
         }
+        self.order_menu = OrderMenu()
+        self.product_menu = ProductMenu()
+        self.courier_menu = CourierMenu()
         super().__init__(self.options)
 
     @classmethod
     def run(cls):
         main_menu = cls()
+        os.system("clear")
         main_menu.loop()
-        console.print("Exiting Application...", style="red")
+        console.print("\nExiting Application!", style="error")
 
     def manage_orders(self):
-        menu = OrderMenu()
-        menu.loop()
+        self.order_menu.loop()
 
     def manage_products(self):
-        menu = ProductMenu()
-        menu.loop()
+        self.product_menu.loop()
 
     def manage_couriers(self):
-        menu = CourierMenu()
-        menu.loop()
+        self.courier_menu.loop()
 
 
 class OrderMenu(Menu):
