@@ -4,6 +4,8 @@ import os
 from rich.console import Console
 from rich.theme import Theme
 
+from db.db import db
+
 console = Console(
     theme=Theme(
         {"base": "#FDF1D6", "notify": "#C39E5C", "warn": "#DA723C", "error": "#EB1D36"}
@@ -13,13 +15,14 @@ console = Console(
 
 class Menu:
     def __init__(self, options) -> None:
-        self.options = options
+        self.options: dict = options
 
     def loop(self):
         while True:
             self.print_menu()
             cmd = self.prompt()
             if cmd == "0":
+                os.system("clear")
                 break
 
             if cmd not in self.options.keys():
@@ -29,7 +32,6 @@ class Menu:
 
             os.system("clear")
             self.options[cmd]()
-            os.system("clear")
 
     def print_menu(self):
         for cmd, opt in self.options.items():
@@ -37,6 +39,7 @@ class Menu:
                 opt = opt.__name__.replace("_", " ").title()
 
             console.print(f"[notify]{cmd})[/notify] [base]{opt}[/base]")
+
         if "0" not in self.options.keys():
             console.print(f"[notify]0)[/notify] [base]Return[/base]")
 
@@ -51,6 +54,7 @@ class MainMenu(Menu):
             "1": self.manage_orders,
             "2": self.manage_products,
             "3": self.manage_couriers,
+            "0": "Exit",
         }
         self.order_menu = OrderMenu()
         self.product_menu = ProductMenu()
@@ -62,7 +66,8 @@ class MainMenu(Menu):
         main_menu = cls()
         os.system("clear")
         main_menu.loop()
-        console.print("\nExiting Application!", style="error")
+        os.system("clear")
+        console.print("Exiting Application!", style="error")
 
     def manage_orders(self):
         self.order_menu.loop()
@@ -111,11 +116,22 @@ class ProductMenu(Menu):
         }
         super().__init__(self.options)
 
-    def get_products(self):
-        pass
+    def get_products(self) -> None:
+        products = db.read("products")
+        if not products:
+            return console.print("No Products!\n", style="notify")
+
+        for id, entry in enumerate(products, 1):
+            console.print(f"[notify]{id})[/notify] [base]{entry.name}[/base]")
+        else:
+            print()
 
     def add_product(self):
-        pass
+        console.print("Enter New Product Name:", style="base")
+        new_product = self.prompt().title()
+        db.create_product(name=new_product)
+        os.system("clear")
+        console.print(f"Product '{new_product}' Added!\n", style="notify")
 
     def update_product(self):
         pass
@@ -134,11 +150,22 @@ class CourierMenu(Menu):
         }
         super().__init__(self.options)
 
-    def get_couriers(self):
-        pass
+    def get_couriers(self) -> None:
+        couriers = db.read("couriers")
+        if not couriers:
+            return console.print("No Couriers!\n", style="notify")
+
+        for id, entry in enumerate(couriers, 1):
+            console.print(f"[notify]{id})[/notify] [base]{entry.name}[/base]")
+        else:
+            print()
 
     def add_courier(self):
-        pass
+        console.print("Enter New Courier Name:", style="base")
+        new_courier = self.prompt().title()
+        db.create_courier(name=new_courier)
+        os.system("clear")
+        console.print(f"Courier '{new_courier}' Added!\n", style="notify")
 
     def update_courier(self):
         pass
