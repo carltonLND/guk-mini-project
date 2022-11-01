@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
 
@@ -19,26 +20,82 @@ class Courier:
     name: str
 
 
-@dataclass
-class Data:
-    orders: list[Order] = field(init=False, default_factory=list)
-    products: list[Product] = field(init=False, default_factory=list)
-    couriers: list[Courier] = field(init=False, default_factory=list)
+class DataList(ABC):
+    @abstractmethod
+    def add_data(self):
+        pass
 
-    def read(self, data_type: str):
-        try:
-            return getattr(self, data_type)
-        except AttributeError as e:
-            print("ERROR:", e)
+    @abstractmethod
+    def get_data(self):
+        pass
 
-    def create_order(self, **kwargs):
-        self.orders.append(Order(**kwargs))
+    @abstractmethod
+    def update_data(self):
+        pass
 
-    def create_product(self, **kwargs):
-        self.products.append(Product(**kwargs))
-
-    def create_courier(self, **kwargs):
-        self.couriers.append(Courier(**kwargs))
+    @abstractmethod
+    def delete_data(self):
+        pass
 
 
-db = Data()
+class OrderList(DataList):
+    def __init__(self) -> None:
+        self.list = []
+
+    def add_data(self, *, order: Order) -> None:
+        self.list.append(order)
+
+    def get_data(self, *, target: int) -> Order:
+        return self.list[target]
+
+    @staticmethod
+    def update_data(*, order: Order, **kwargs) -> None:
+        for key in kwargs:
+            if not getattr(order, kwargs[key]):
+                continue
+            setattr(order, key, kwargs[key])
+
+    def delete_data(self, *, target: int) -> None:
+        self.list.pop(target)
+
+
+class ProductList(DataList):
+    def __init__(self) -> None:
+        self.list = []
+
+    def add_data(self, *, product: Product) -> None:
+        self.list.append(product)
+
+    def get_data(self, *, target: int) -> Product:
+        return self.list[target]
+
+    @staticmethod
+    def update_data(*, product: Product, **kwargs) -> None:
+        for key in kwargs:
+            if not getattr(product, kwargs[key]):
+                continue
+            setattr(product, key, kwargs[key])
+
+    def delete_data(self, *, target: int) -> None:
+        self.list.pop(target)
+
+
+class CourierList(DataList):
+    def __init__(self) -> None:
+        self.list = []
+
+    def add_data(self, *, courier: Courier) -> None:
+        self.list.append(courier)
+
+    def get_data(self, *, target: int) -> Courier:
+        return self.list[target]
+
+    @staticmethod
+    def update_data(*, courier: Courier, **kwargs) -> None:
+        for key in kwargs:
+            if not getattr(courier, kwargs[key]):
+                continue
+            setattr(courier, key, kwargs[key])
+
+    def delete_data(self, *, target: int) -> None:
+        self.list.pop(target)
