@@ -53,10 +53,23 @@ class OrderList(DataList):
         for key in kwargs:
             if not getattr(order, kwargs[key]):
                 continue
+
             setattr(order, key, kwargs[key])
 
     def delete_data(self, *, target: int) -> None:
         self.list.pop(target)
+
+    def __repr__(self) -> str:
+        if not self.list:
+            return "No Data Available!\n"
+
+        data_str = ""
+        for num, data in enumerate(self.list, 1):
+            data_str += f"""{num}) Name: {data.name}
+                              \r   Address: {data.address}
+                              \r   Phone: {data.phone}
+                              \r   Status: {data.status}\n"""
+        return data_str
 
 
 class ProductList(DataList):
@@ -74,10 +87,20 @@ class ProductList(DataList):
         for key in kwargs:
             if not getattr(product, kwargs[key]):
                 continue
+
             setattr(product, key, kwargs[key])
 
     def delete_data(self, *, target: int) -> None:
         self.list.pop(target)
+
+    def __repr__(self) -> str:
+        if not self.list:
+            return "No Data Available!\n"
+
+        data_str = ""
+        for num, data in enumerate(self.list, 1):
+            data_str += f"{num}) {data.name}\n"
+        return data_str
 
 
 class CourierList(DataList):
@@ -95,7 +118,17 @@ class CourierList(DataList):
         for key in kwargs:
             if not getattr(courier, kwargs[key]):
                 continue
+
             setattr(courier, key, kwargs[key])
 
     def delete_data(self, *, target: int) -> None:
         self.list.pop(target)
+
+    def __repr__(self) -> str:
+        if not self.list:
+            return "No Data Available!\n"
+
+        data_str = ""
+        for num, data in enumerate(self.list, 1):
+            data_str += f"{num}) {data.name}\n"
+        return data_str
