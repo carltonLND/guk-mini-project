@@ -2,11 +2,26 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
+from rich.console import Console
+from rich.theme import Theme
+
+from db import db
+
+console = Console(
+    theme=Theme(
+        {"base": "#FDF1D6", "notify": "#C39E5C", "warn": "#DA723C", "error": "#EB1D36"}
+    )
+)
+
 
 class Menu(ABC):
     _parent_menu = None
     _child_menus = ()
     _options = ()
+
+    @abstractmethod
+    def run(self):
+        pass
 
     @property
     def child_menus(self) -> tuple:
@@ -53,9 +68,25 @@ class MainMenu(Menu):
             "Exit Application",
         )
 
+    def run(self, cmd: str = "") -> str | None:
+        while True:
+            cmd = input(">>> ")
+            if cmd == "0":
+                break
+            elif cmd == "1":
+                return "order_menu"
+            elif cmd == "2":
+                return "product_menu"
+            elif cmd == "3":
+                return "courier_menu"
+            else:
+                print("Invalid Input!\n")
+
+            print(self)
+
 
 class ProductMenu(Menu):
-    def __init__(self, *, parent_menu: Menu) -> None:
+    def __init__(self, *, parent_menu: Menu, data: db.ProductList) -> None:
         self._options = (
             "Display Products",
             "Add New Product",
@@ -64,10 +95,32 @@ class ProductMenu(Menu):
             "Main Menu",
         )
         self.parent_menu = parent_menu
+        self.data = data
+
+    def run(self, cmd: str = "") -> None:
+        while True:
+            cmd = input(">>> ")
+            if cmd == "0":
+                break
+            elif cmd == "1":
+                print(self.data)
+            elif cmd == "2":
+                print("Enter Product Name:\n")
+                new_product = db.Product(name=input(">>> "))
+                self.data.add_data(product=new_product)
+                print("Product Added!\n")
+            elif cmd == "3":
+                print("Not Yet Implemented!\n")
+            elif cmd == "4":
+                print("Not Yet Implemented!\n")
+            else:
+                print("Invalid Input!\n")
+
+            print(self)
 
 
 class CourierMenu(Menu):
-    def __init__(self, *, parent_menu: Menu) -> None:
+    def __init__(self, *, parent_menu: Menu, data: db.CourierList) -> None:
         self._options = (
             "Display Couriers",
             "Add New Courier",
@@ -76,10 +129,32 @@ class CourierMenu(Menu):
             "Main Menu",
         )
         self.parent_menu = parent_menu
+        self.data = data
+
+    def run(self, cmd: str = "") -> None:
+        while True:
+            cmd = input(">>> ")
+            if cmd == "0":
+                break
+            elif cmd == "1":
+                print(self.data)
+            elif cmd == "2":
+                print("Enter Product Name:\n")
+                new_courier = db.Courier(name=input(">>> ").lower())
+                self.data.add_data(courier=new_courier)
+                print("Product Added!\n")
+            elif cmd == "3":
+                print("Not Yet Implemented!\n")
+            elif cmd == "4":
+                print("Not Yet Implemented!\n")
+            else:
+                print("Invalid Input!\n")
+
+            print(self)
 
 
 class OrderMenu(Menu):
-    def __init__(self, *, parent_menu: Menu) -> None:
+    def __init__(self, *, parent_menu: Menu, data: db.OrderList) -> None:
         self._options = (
             "Display Orders",
             "Add New Order",
@@ -89,6 +164,41 @@ class OrderMenu(Menu):
             "Main Menu",
         )
         self.parent_menu = parent_menu
+        self.data = data
+
+    def run(self, cmd: str = "") -> None:
+        while True:
+            cmd = input(">>> ")
+            if cmd == "0":
+                break
+            elif cmd == "1":
+                print(self.data)
+            elif cmd == "2":
+                print("Enter Client Name:\n")
+                name = input(">>> ")
+                print("Enter Client Address:\n")
+                address = input(">>> ")
+                while True:
+                    try:
+                        print("Enter Client Phone Number:\n")
+                        phone = int(input(">>> "))
+                    except ValueError:
+                        print("Invalid Input!\n")
+                    else:
+                        break
+                new_order = db.Order(name=name, address=address, phone=phone)
+                self.data.add_data(order=new_order)
+                print("Product Added!\n")
+            elif cmd == "3":
+                print("Not Yet Implemented!\n")
+            elif cmd == "4":
+                print("Not Yet Implemented!\n")
+            elif cmd == "5":
+                print("Not Yet Implemented!\n")
+            else:
+                print("Invalid Input!\n")
+
+            print(self)
 
 
 class MenuController:
@@ -114,10 +224,23 @@ class MenuController:
 
     def prev_menu(self) -> None:
         if not self.parent:
-            return print("Already at the root menu!")
+            raise SystemExit("Exiting Application...")
 
         self.current_menu = self.parent
         self.parent = self.current_menu.parent_menu
 
     def print(self):
         print(self.current_menu)
+
+    @classmethod
+    def setup_factory(cls) -> MenuController:
+        product_data = db.ProductList()
+        courier_data = db.CourierList()
+        order_data = db.OrderList()
+        main_menu = MainMenu()
+        return cls(
+            main_menu=main_menu,
+            product_menu=ProductMenu(parent_menu=main_menu, data=product_data),
+            courier_menu=CourierMenu(parent_menu=main_menu, data=courier_data),
+            order_menu=OrderMenu(parent_menu=main_menu, data=order_data),
+        )
