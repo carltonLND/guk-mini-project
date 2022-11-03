@@ -14,7 +14,7 @@ A **hopefully** somewhat simple CLI application to manage and track orders.
 
 ## Dependencies
 
-- Python 3.9+
+- Python 3.10.7+
 - Pip / Conda
 
 # Installation
