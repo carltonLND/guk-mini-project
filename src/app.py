@@ -168,6 +168,7 @@ def cafe_factory() -> MenuController:
     courier_data = db.CourierList()
     order_data = db.OrderList()
     main_menu = MainMenu()
+
     return MenuController(
         main_menu=main_menu,
         product_menu=ProductMenu(parent_menu=main_menu, data=product_data),
@@ -177,7 +178,9 @@ def cafe_factory() -> MenuController:
 
 
 def main() -> None:
-    controller = cafe_factory()
+    with console.status("[warn]Loading Data..."):
+        controller = cafe_factory()
+
     while True:
         console.clear()
         controller.print()
