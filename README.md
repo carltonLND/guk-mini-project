@@ -6,7 +6,10 @@ A **hopefully** somewhat simple CLI application to manage and track orders.
 
 - Dynamic menu tree
 - Eye catching terminal colors using [Rich](https://github.com/Textualize/rich)
-<!-- - CRUD operations for easy data management -->
+- CRUD operations for easy data management:
+ - Create ✔
+ - Read ✔
+  
 <!-- - Data persistence through .txt files -->
 
 ## Dependencies
