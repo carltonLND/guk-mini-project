@@ -15,9 +15,7 @@ class MainMenu(Menu):
 
     def run(self, cmd: str = "") -> str | None:
         while True:
-            cmd = console.input(
-                "[prompt]>>> ",
-            )
+            cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
             elif cmd == "1":
@@ -47,9 +45,7 @@ class ProductMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
-            cmd = console.input(
-                "[prompt]>>> ",
-            )
+            cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
             elif cmd == "1":
@@ -88,9 +84,7 @@ class CourierMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
-            cmd = console.input(
-                "[prompt]>>> ",
-            )
+            cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
             elif cmd == "1":
@@ -130,9 +124,7 @@ class OrderMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
-            cmd = console.input(
-                "[prompt]>>> ",
-            )
+            cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
             elif cmd == "1":
