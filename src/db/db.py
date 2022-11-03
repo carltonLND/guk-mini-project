@@ -69,7 +69,7 @@ class OrderList(DataList):
                               \r   Address: {data.address}
                               \r   Phone: {data.phone}
                               \r   Status: {data.status}\n"""
-        return data_str
+        return data_str.title()
 
 
 class ProductList(DataList):
@@ -100,7 +100,7 @@ class ProductList(DataList):
         data_str = ""
         for num, data in enumerate(self.list, 1):
             data_str += f"{num}) {data.name}\n"
-        return data_str
+        return data_str.title()
 
 
 class CourierList(DataList):
@@ -131,4 +131,4 @@ class CourierList(DataList):
         data_str = ""
         for num, data in enumerate(self.list, 1):
             data_str += f"{num}) {data.name}\n"
-        return data_str
+        return data_str.title()
