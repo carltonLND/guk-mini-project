@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-import os
-
 from db import db
 from menu import Menu, MenuController
 from menu import default_console as console
-
-# Clear screen support for Windows and Unix
-CLEAR = "clear" if os.name == "posix" else "cls"
 
 
 class MainMenu(Menu):
@@ -32,7 +27,7 @@ class MainMenu(Menu):
             elif cmd == "3":
                 return "courier_menu"
             else:
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Invalid Input!\n")
 
             console.print(self)
@@ -58,22 +53,22 @@ class ProductMenu(Menu):
             if cmd == "0":
                 break
             elif cmd == "1":
-                os.system(CLEAR)
+                console.clear()
                 console.print(self.data)
             elif cmd == "2":
                 console.print("[notify]Enter Product Name:\n")
                 new_product = db.Product(name=console.input("[prompt]>>> "))
                 self.data.add_data(product=new_product)
-                os.system(CLEAR)
+                console.clear()
                 console.print("[notify]Product Added!\n")
             elif cmd == "3":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             elif cmd == "4":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             else:
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Invalid Input!\n")
 
             console.print(self)
@@ -99,22 +94,22 @@ class CourierMenu(Menu):
             if cmd == "0":
                 break
             elif cmd == "1":
-                os.system(CLEAR)
+                console.clear()
                 console.print(self.data)
             elif cmd == "2":
-                console.print("Enter Product Name:\n")
+                console.print("Enter Courier Name:\n")
                 new_courier = db.Courier(name=input(">>> ").lower())
                 self.data.add_data(courier=new_courier)
-                os.system(CLEAR)
-                console.print("Product Added!\n")
+                console.clear()
+                console.print("Courier Added!\n")
             elif cmd == "3":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             elif cmd == "4":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             else:
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Invalid Input!\n")
 
             console.print(self)
@@ -141,7 +136,7 @@ class OrderMenu(Menu):
             if cmd == "0":
                 break
             elif cmd == "1":
-                os.system(CLEAR)
+                console.clear()
                 console.print(self.data)
             elif cmd == "2":
                 console.print("Enter Client Name:\n")
@@ -158,19 +153,19 @@ class OrderMenu(Menu):
                         break
                 new_order = db.Order(name=name, address=address, phone=phone)
                 self.data.add_data(order=new_order)
-                os.system(CLEAR)
+                console.clear()
                 console.print("Order Added!\n")
             elif cmd == "3":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             elif cmd == "4":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             elif cmd == "5":
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             else:
-                os.system(CLEAR)
+                console.clear()
                 console.print("[warn]Invalid Input!\n")
 
             console.print(self)
@@ -192,7 +187,7 @@ def cafe_factory() -> MenuController:
 def main() -> None:
     controller = cafe_factory()
     while True:
-        os.system(CLEAR)
+        console.clear()
         controller.print()
         menu = controller.current_menu.run()
         if not menu:
