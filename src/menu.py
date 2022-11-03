@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from rich.console import Console
 from rich.theme import Theme
 
-console = Console(
+default_console = Console(
     theme=Theme(
         {
             "base": "#FDF1D6",
@@ -74,13 +74,13 @@ class MenuController:
     def next_menu(self, target_menu: str) -> None:
         if target_menu not in self.menus.keys():
             raise SystemExit(
-                f"ERROR: Menu '{target_menu}' not added to controller!\nExiting..."
+                f"[error]ERROR: Menu '{target_menu}' not added to controller!\nExiting..."
             )
 
         next_menu = self.menus[target_menu]
         if next_menu not in self.current_menu.child_menus:
             raise SystemExit(
-                f"ERROR: '{target_menu}' is not a valid child menu!\nExiting..."
+                f"[error]ERROR: '{target_menu}' is not a valid child menu!\nExiting..."
             )
 
         self.parent = self.current_menu
@@ -88,11 +88,11 @@ class MenuController:
 
     def prev_menu(self) -> None:
         if not self.parent:
-            console.print("[error]Exiting Application...")
+            default_console.print("[error]Exiting Application...")
             exit()
 
         self.current_menu = self.parent
         self.parent = self.current_menu.parent_menu
 
     def print(self):
-        console.print(self.current_menu)
+        default_console.print(self.current_menu)
