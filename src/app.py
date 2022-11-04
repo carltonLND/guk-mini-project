@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from db import db
+import db
 from menu import Menu, MenuController
 from menu import default_console as console
 
