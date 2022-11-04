@@ -20,7 +20,7 @@ class Courier:
     name: str
 
 
-# TODO: Move data update & delete responsibilites
+# TODO: Move data update responsibilites
 #       to the data object to support abstraction
 #       for DataList inheritance.
 class DataList(ABC):
