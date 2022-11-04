@@ -20,6 +20,9 @@ class Courier:
     name: str
 
 
+# TODO: Move data update & delete responsibilites
+#       to the data object to support abstraction
+#       for DataList inheritance.
 class DataList(ABC):
     @abstractmethod
     def add_data(self):
