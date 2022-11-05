@@ -7,6 +7,7 @@ class Order:
     name: str
     address: str
     phone: int
+    courier: int
     status: str = field(init=False, default="Preparing")
 
 
@@ -69,9 +70,10 @@ class OrderList(DataList):
         data_str = ""
         for num, data in enumerate(self.list, 1):
             data_str += f"""{num}) Name: {data.name}
-                              \r   Address: {data.address}
-                              \r   Phone: {data.phone}
-                              \r   Status: {data.status}\n"""
+   Address: {data.address}
+   Phone: {data.phone}
+   Courier: {data.courier}
+   Status: {data.status}\n"""
         return data_str.title()
 
 
@@ -115,6 +117,12 @@ class CourierList(DataList):
 
     def get_data(self, *, target: int) -> Courier:
         return self.list[target]
+
+    def data_exists(self) -> bool:
+        if not self.list:
+            return False
+
+        return True
 
     @staticmethod
     def update_data(*, courier: Courier, **kwargs) -> None:

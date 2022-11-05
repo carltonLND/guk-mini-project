@@ -21,13 +21,24 @@ default_console = Console(
 
 
 class Menu(ABC):
+    name: str
     _parent_menu = None
     _child_menus = ()
+    _sibling_menus = {}
     _options = ()
 
     @abstractmethod
     def run(self):
         pass
+
+    @property
+    def sibling_menus(self) -> dict:
+        return self._sibling_menus
+
+    @sibling_menus.setter
+    def sibling_menus(self, menu: Menu) -> None:
+        self._sibling_menus[menu.name] = menu
+        menu._sibling_menus[self.name] = self
 
     @property
     def child_menus(self) -> tuple:
@@ -45,6 +56,17 @@ class Menu(ABC):
     def parent_menu(self, menu: Menu) -> None:
         menu._child_menus += (self,)
         self._parent_menu = menu
+
+    @staticmethod
+    def get_int_input(prompt):
+        while True:
+            try:
+                default_console.print(prompt)
+                choice = int(input(">>> "))
+            except ValueError:
+                default_console.print("[warn]Invalid Input!\n")
+            else:
+                return choice
 
     def __len__(self):
         return len(self._options)
@@ -71,16 +93,27 @@ class MenuController:
         self.current_menu = main_menu
         self.parent = None
 
+    def populate_siblings(self):
+        prev_menu = None
+        for name, menu in self.menus.items():
+            if name == "main_menu":
+                continue
+
+            if prev_menu:
+                menu.sibling_menus = prev_menu
+
+            prev_menu = menu
+
     def next_menu(self, target_menu: str) -> None:
         if target_menu not in self.menus.keys():
             raise SystemExit(
-                f"[error]ERROR: Menu '{target_menu}' not added to controller!\nExiting..."
+                f"ERROR: Menu '{target_menu}' not added to controller!\nExiting..."
             )
 
         next_menu = self.menus[target_menu]
         if next_menu not in self.current_menu.child_menus:
             raise SystemExit(
-                f"[error]ERROR: '{target_menu}' is not a valid child menu!\nExiting..."
+                f"ERROR: '{target_menu}' is not a valid child menu!\nExiting..."
             )
 
         self.parent = self.current_menu

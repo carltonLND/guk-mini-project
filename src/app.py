@@ -6,6 +6,7 @@ from menu import default_console as console
 
 class MainMenu(Menu):
     def __init__(self) -> None:
+        self.name = "main_menu"
         self._options = (
             "Manage Orders",
             "Manage Products",
@@ -15,6 +16,7 @@ class MainMenu(Menu):
 
     def run(self, cmd: str = "") -> str | None:
         while True:
+            console.print(self)
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
@@ -28,11 +30,10 @@ class MainMenu(Menu):
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
 
-            console.print(self)
-
 
 class ProductMenu(Menu):
     def __init__(self, *, parent_menu: Menu, data: db.ProductList) -> None:
+        self.name = "product_menu"
         self._options = (
             "Display Products",
             "Add New Product",
@@ -45,6 +46,7 @@ class ProductMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
+            console.print(self)
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
@@ -67,11 +69,10 @@ class ProductMenu(Menu):
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
 
-            console.print(self)
-
 
 class CourierMenu(Menu):
     def __init__(self, *, parent_menu: Menu, data: db.CourierList) -> None:
+        self.name = "courier_menu"
         self._options = (
             "Display Couriers",
             "Add New Courier",
@@ -84,6 +85,7 @@ class CourierMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
+            console.print(self)
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
@@ -106,11 +108,10 @@ class CourierMenu(Menu):
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
 
-            console.print(self)
-
 
 class OrderMenu(Menu):
     def __init__(self, *, parent_menu: Menu, data: db.OrderList) -> None:
+        self.name = "order_menu"
         self._options = (
             "Display Orders",
             "Add New Order",
@@ -124,6 +125,7 @@ class OrderMenu(Menu):
 
     def run(self, cmd: str = "") -> None:
         while True:
+            console.print(self)
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
                 break
@@ -131,19 +133,30 @@ class OrderMenu(Menu):
                 console.clear()
                 console.print(self.data)
             elif cmd == "2":
+                console.clear()
+                if not self.sibling_menus["courier_menu"].data.data_exists():
+                    console.print("No Couriers Available\n")
+                    continue
+
                 console.print("Enter Client Name:\n")
                 name = input(">>> ")
+
                 console.print("Enter Client Address:\n")
                 address = input(">>> ")
-                while True:
-                    try:
-                        console.print("Enter Client Phone Number:\n")
-                        phone = int(input(">>> "))
-                    except ValueError:
-                        console.print("Invalid Input!\n")
-                    else:
-                        break
-                new_order = db.Order(name=name, address=address, phone=phone)
+
+                phone = self.get_int_input("Enter Client Phone Number:\n")
+
+                courier_data = self.sibling_menus["courier_menu"].data
+                console.print(courier_data)
+                courier = self.get_int_input("Select Courier By Number:\n")
+                while courier not in range(1, len(courier_data.list) + 1):
+                    console.print("Invalid Input!\n")
+                    console.print(courier_data)
+                    courier = self.get_int_input("Select Courier By Number:\n")
+
+                new_order = db.Order(
+                    name=name, address=address, phone=phone, courier=courier
+                )
                 self.data.add_data(order=new_order)
                 console.clear()
                 console.print("Order Added!\n")
@@ -160,21 +173,26 @@ class OrderMenu(Menu):
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
 
-            console.print(self)
-
 
 def cafe_factory() -> MenuController:
     product_data = db.ProductList()
     courier_data = db.CourierList()
     order_data = db.OrderList()
-    main_menu = MainMenu()
 
-    return MenuController(
+    main_menu = MainMenu()
+    product_menu = ProductMenu(parent_menu=main_menu, data=product_data)
+    courier_menu = CourierMenu(parent_menu=main_menu, data=courier_data)
+    order_menu = OrderMenu(parent_menu=main_menu, data=order_data)
+
+    controller = MenuController(
         main_menu=main_menu,
-        product_menu=ProductMenu(parent_menu=main_menu, data=product_data),
-        courier_menu=CourierMenu(parent_menu=main_menu, data=courier_data),
-        order_menu=OrderMenu(parent_menu=main_menu, data=order_data),
+        product_menu=product_menu,
+        courier_menu=courier_menu,
+        order_menu=order_menu,
     )
+
+    controller.populate_siblings()
+    return controller
 
 
 def main() -> None:
@@ -183,7 +201,6 @@ def main() -> None:
 
     while True:
         console.clear()
-        controller.print()
         menu = controller.current_menu.run()
         if not menu:
             controller.prev_menu()
