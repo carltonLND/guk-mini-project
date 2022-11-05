@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+import os
+from pathlib import Path
+
 import db
+from db.data_objects import CourierList, OrderList
+from file_handlers import TXTHandler
 from menu import Menu, MenuController
 from menu import default_console as console
 
@@ -174,15 +179,35 @@ class OrderMenu(Menu):
                 console.print("[warn]Invalid Input!\n")
 
 
-def cafe_factory() -> MenuController:
-    product_data = db.ProductList()
-    courier_data = db.CourierList()
+def handler_factory(file_type: str) -> TXTHandler:
+    data_dir = os.path.join(Path(__file__).parent.parent, "data/")
+    return TXTHandler(data_dir)
+
+
+# TODO: Move data loading / saving responsibilities to DataList's
+def data_factory(handler) -> dict:
+    products = [
+        db.Product(name=line.strip()) for line in handler.load_data("products.txt")
+    ]
+    product_data = db.ProductList(products=products)
+
+    couriers = [
+        db.Courier(name=line.strip()) for line in handler.load_data("couriers.txt")
+    ]
+    courier_data = db.CourierList(couriers=couriers)
+
     order_data = db.OrderList()
+    return {"products": product_data, "couriers": courier_data, "orders": order_data}
+
+
+def cafe_factory() -> MenuController:
+    handler = handler_factory("txt")
+    data = data_factory(handler)
 
     main_menu = MainMenu()
-    product_menu = ProductMenu(parent_menu=main_menu, data=product_data)
-    courier_menu = CourierMenu(parent_menu=main_menu, data=courier_data)
-    order_menu = OrderMenu(parent_menu=main_menu, data=order_data)
+    product_menu = ProductMenu(parent_menu=main_menu, data=data["products"])
+    courier_menu = CourierMenu(parent_menu=main_menu, data=data["couriers"])
+    order_menu = OrderMenu(parent_menu=main_menu, data=data["orders"])
 
     controller = MenuController(
         main_menu=main_menu,

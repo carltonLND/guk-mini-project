@@ -78,8 +78,8 @@ class OrderList(DataList):
 
 
 class ProductList(DataList):
-    def __init__(self) -> None:
-        self.list = []
+    def __init__(self, *, products: list[Product]) -> None:
+        self.list = products or []
 
     def add_data(self, *, product: Product) -> None:
         self.list.append(product)
@@ -109,8 +109,8 @@ class ProductList(DataList):
 
 
 class CourierList(DataList):
-    def __init__(self) -> None:
-        self.list = []
+    def __init__(self, *, couriers: list[Courier]) -> None:
+        self.list = couriers or []
 
     def add_data(self, *, courier: Courier) -> None:
         self.list.append(courier)

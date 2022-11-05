@@ -36,3 +36,9 @@ pip install -r requirements.txt
 conda create --name <env> --file requirements.txt
 conda activate <env>
 ```
+
+### TODO:
+- Fix crash when attempting to load non-existing file
+- Refactor data related functionality to their objects
+- Create file handler abc class
+- Add saving changes when quiting the application
