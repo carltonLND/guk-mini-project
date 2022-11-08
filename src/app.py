@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from enum import Enum
 
 import db
@@ -23,7 +22,7 @@ class MainMenu(Menu):
             "Exit Application",
         )
 
-    def run(self, cmd: str = "") -> str | None:
+    def run(self)-> str | None:
         while True:
             cmd = console.input("[prompt]>>> ")
             match cmd:
@@ -54,7 +53,7 @@ class ProductMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
@@ -93,7 +92,7 @@ class CourierMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
@@ -133,7 +132,7 @@ class OrderMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             cmd = console.input("[prompt]>>> ")
             if cmd == "0":
