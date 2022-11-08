@@ -1,11 +1,11 @@
-class TXTHandler:
-    def __init__(self, data_dir: str) -> None:
-        self.data_dir = data_dir
+from file_handlers.handler import Handler
 
+
+class TXTHandler(Handler):
     def load_data(self, file_name: str):
-        with open(self.data_dir + file_name, "r") as f:
-            return f.readlines()
+        with open(self.data_dir + file_name + ".txt", "r") as f:
+            return f.read().splitlines()
 
     def save_data(self, file_name: str, data: list):
-        with open(self.data_dir + file_name, "w") as f:
+        with open(self.data_dir + file_name + ".txt", "w") as f:
             f.writelines(data)
