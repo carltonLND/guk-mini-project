@@ -1,9 +1,22 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
+from file_handlers.handler import Handler
+
+
+class DataObject(ABC):
+    # TODO: Don't even know if this going to work how i think
+    # it is, will have to find out the hard way...
+    def update(self, **kwargs):
+        for key in kwargs.keys():
+            if not getattr(self, key):
+                continue
+
+            setattr(self, key, kwargs[key])
+
 
 @dataclass(kw_only=True, slots=True)
-class Order:
+class Order(DataObject):
     name: str
     address: str
     phone: int
@@ -12,19 +25,21 @@ class Order:
 
 
 @dataclass(kw_only=True, slots=True)
-class Product:
+class Product(DataObject):
     name: str
 
 
 @dataclass(kw_only=True, slots=True)
-class Courier:
+class Courier(DataObject):
     name: str
 
 
-# TODO: Move data update responsibilites
-#       to the data object to support abstraction
-#       for DataList inheritance.
 class DataList(ABC):
+    def __init__(self, *, file_handler: Handler) -> None:
+        self._list = []
+        self.handler = file_handler
+        self.load_data()
+
     @abstractmethod
     def add_data(self):
         pass
@@ -34,41 +49,36 @@ class DataList(ABC):
         pass
 
     @abstractmethod
-    def update_data(self):
-        pass
-
-    @abstractmethod
     def delete_data(self):
         pass
 
+    @abstractmethod
+    def load_data(self):
+        pass
+
+    def __len__(self) -> int:
+        return len(self._list)
+
 
 class OrderList(DataList):
-    def __init__(self) -> None:
-        self.list = []
-
     def add_data(self, *, order: Order) -> None:
-        self.list.append(order)
+        self._list.append(order)
 
     def get_data(self, *, target: int) -> Order:
-        return self.list[target]
-
-    @staticmethod
-    def update_data(*, order: Order, **kwargs) -> None:
-        for key in kwargs:
-            if not getattr(order, kwargs[key]):
-                continue
-
-            setattr(order, key, kwargs[key])
+        return self._list[target]
 
     def delete_data(self, *, target: int) -> None:
-        self.list.pop(target)
+        self._list.pop(target)
+
+    def load_data(self):
+        pass
 
     def __repr__(self) -> str:
-        if not self.list:
+        if not self._list:
             return "No Data Available!\n"
 
         data_str = ""
-        for num, data in enumerate(self.list, 1):
+        for num, data in enumerate(self._list, 1):
             data_str += f"""{num}) Name: {data.name}
    Address: {data.address}
    Phone: {data.phone}
@@ -78,68 +88,56 @@ class OrderList(DataList):
 
 
 class ProductList(DataList):
-    def __init__(self, *, products: list[Product]) -> None:
-        self.list = products or []
-
     def add_data(self, *, product: Product) -> None:
-        self.list.append(product)
+        self._list.append(product)
 
     def get_data(self, *, target: int) -> Product:
-        return self.list[target]
-
-    @staticmethod
-    def update_data(*, product: Product, **kwargs) -> None:
-        for key in kwargs:
-            if not getattr(product, kwargs[key]):
-                continue
-
-            setattr(product, key, kwargs[key])
+        return self._list[target]
 
     def delete_data(self, *, target: int) -> None:
-        self.list.pop(target)
+        self._list.pop(target)
+
+    def load_data(self) -> None:
+        self._list += [
+            Product(name=line) for line in self.handler.load_data("products")
+        ]
 
     def __repr__(self) -> str:
-        if not self.list:
+        if not self._list:
             return "No Data Available!\n"
 
         data_str = ""
-        for num, data in enumerate(self.list, 1):
+        for num, data in enumerate(self._list, 1):
             data_str += f"{num}) {data.name}\n"
         return data_str.title()
 
 
 class CourierList(DataList):
-    def __init__(self, *, couriers: list[Courier]) -> None:
-        self.list = couriers or []
-
     def add_data(self, *, courier: Courier) -> None:
-        self.list.append(courier)
+        self._list.append(courier)
 
     def get_data(self, *, target: int) -> Courier:
-        return self.list[target]
+        return self._list[target]
 
     def data_exists(self) -> bool:
-        if not self.list:
+        if not self._list:
             return False
 
         return True
 
-    @staticmethod
-    def update_data(*, courier: Courier, **kwargs) -> None:
-        for key in kwargs:
-            if not getattr(courier, kwargs[key]):
-                continue
-
-            setattr(courier, key, kwargs[key])
-
     def delete_data(self, *, target: int) -> None:
-        self.list.pop(target)
+        self._list.pop(target)
+
+    def load_data(self) -> None:
+        self._list += [
+            Courier(name=line) for line in self.handler.load_data("couriers")
+        ]
 
     def __repr__(self) -> str:
-        if not self.list:
+        if not self._list:
             return "No Data Available!\n"
 
         data_str = ""
-        for num, data in enumerate(self.list, 1):
+        for num, data in enumerate(self._list, 1):
             data_str += f"{num}) {data.name}\n"
         return data_str.title()
