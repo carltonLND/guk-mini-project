@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import os
+from enum import Enum, auto
 from pathlib import Path
 
 import db
-from db.data_objects import CourierList, OrderList
-from file_handlers import TXTHandler
+from file_handlers import Handler, TXTHandler
 from menu import Menu, MenuController
 from menu import default_console as console
 
@@ -154,7 +154,7 @@ class OrderMenu(Menu):
                 courier_data = self.sibling_menus["courier_menu"].data
                 console.print(courier_data)
                 courier = self.get_int_input("Select Courier By Number:\n")
-                while courier not in range(1, len(courier_data.list) + 1):
+                while courier not in range(1, len(courier_data) + 1):
                     console.print("Invalid Input!\n")
                     console.print(courier_data)
                     courier = self.get_int_input("Select Courier By Number:\n")
@@ -179,29 +179,28 @@ class OrderMenu(Menu):
                 console.print("[warn]Invalid Input!\n")
 
 
-def handler_factory(file_type: str) -> TXTHandler:
+class FileType(Enum):
+    TXT = auto()
+
+
+def handler_factory(file_type: FileType) -> Handler:
     data_dir = os.path.join(Path(__file__).parent.parent, "data/")
-    return TXTHandler(data_dir)
+    match file_type:
+        case FileType.TXT:
+            return TXTHandler(data_dir)
+        case _:
+            raise TypeError("Filetype not currently supported")
 
 
-# TODO: Move data loading / saving responsibilities to DataList's
 def data_factory(handler) -> dict:
-    products = [
-        db.Product(name=line.strip()) for line in handler.load_data("products.txt")
-    ]
-    product_data = db.ProductList(products=products)
-
-    couriers = [
-        db.Courier(name=line.strip()) for line in handler.load_data("couriers.txt")
-    ]
-    courier_data = db.CourierList(couriers=couriers)
-
-    order_data = db.OrderList()
+    courier_data = db.CourierList(file_handler=handler)
+    product_data = db.ProductList(file_handler=handler)
+    order_data = db.OrderList(file_handler=handler)
     return {"products": product_data, "couriers": courier_data, "orders": order_data}
 
 
 def cafe_factory() -> MenuController:
-    handler = handler_factory("txt")
+    handler = handler_factory(FileType.TXT)
     data = data_factory(handler)
 
     main_menu = MainMenu()
