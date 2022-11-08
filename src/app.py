@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
+
+from enum import Enum
+
 import db
 from menu import Menu, MenuController
 from menu import default_console as console
+
+
+class MenuEnum(Enum):
+    MAIN_MENU = "0"
+    ORDER_MENU = "1"
+    PRODUCT_MENU = "2"
+    COURIER_MENU = "3"
 
 
 class MainMenu(Menu):
@@ -16,17 +26,18 @@ class MainMenu(Menu):
     def run(self, cmd: str = "") -> str | None:
         while True:
             cmd = console.input("[prompt]>>> ")
-            if cmd == "0":
-                break
-            elif cmd == "1":
-                return "order_menu"
-            elif cmd == "2":
-                return "product_menu"
-            elif cmd == "3":
-                return "courier_menu"
-            else:
-                console.clear()
-                console.print("[warn]Invalid Input!\n")
+            match cmd:
+                case "0":
+                    break
+                case MenuEnum.ORDER_MENU.value:
+                    return "order_menu"
+                case MenuEnum.PRODUCT_MENU.value:
+                    return "product_menu"
+                case MenuEnum.COURIER_MENU.value:
+                    return "courier_menu"
+                case _:
+                    console.clear()
+                    console.print("[warn]Invalid Input!\n")
 
             console.print(self)
 
