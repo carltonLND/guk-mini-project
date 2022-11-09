@@ -9,6 +9,10 @@ from menu import Menu, MenuController
 from menu import default_console as console
 
 
+class FileType(Enum):
+    TXT = auto()
+
+
 class MainMenu(Menu):
     def __init__(self) -> None:
         self.name = "main_menu"
@@ -59,11 +63,7 @@ class ProductMenu(Menu):
                 console.clear()
                 console.print(self.data)
             elif cmd == "2":
-                console.print("[notify]Enter Product Name:\n")
-                new_product = db.Product(name=console.input("[prompt]>>> "))
-                self.data.add_data(product=new_product)
-                console.clear()
-                console.print("[notify]Product Added!\n")
+                self.add_product()
             elif cmd == "3":
                 console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
@@ -73,6 +73,13 @@ class ProductMenu(Menu):
             else:
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
+
+    def add_product(self):
+        console.print("[notify]Enter Product Name:\n")
+        new_product = db.Product(name=console.input("[prompt]>>> "))
+        self.data.add_data(data=new_product)
+        console.clear()
+        console.print("[notify]Product Added!\n")
 
 
 class CourierMenu(Menu):
@@ -100,7 +107,7 @@ class CourierMenu(Menu):
             elif cmd == "2":
                 console.print("Enter Courier Name:\n")
                 new_courier = db.Courier(name=input(">>> ").lower())
-                self.data.add_data(courier=new_courier)
+                self.data.add_data(data=new_courier)
                 console.clear()
                 console.print("Courier Added!\n")
             elif cmd == "3":
@@ -162,7 +169,7 @@ class OrderMenu(Menu):
                 new_order = db.Order(
                     name=name, address=address, phone=phone, courier=courier
                 )
-                self.data.add_data(order=new_order)
+                self.data.add_data(data=new_order)
                 console.clear()
                 console.print("Order Added!\n")
             elif cmd == "3":
@@ -177,10 +184,6 @@ class OrderMenu(Menu):
             else:
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
-
-
-class FileType(Enum):
-    TXT = auto()
 
 
 def handler_factory(file_type: FileType) -> Handler:

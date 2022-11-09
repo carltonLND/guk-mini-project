@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from rich.console import Console
 from rich.theme import Theme
 
+from db import DataList
+
 default_console = Console(
     theme=Theme(
         {
@@ -26,6 +28,7 @@ class Menu(ABC):
     _child_menus = ()
     _sibling_menus = {}
     _options = ()
+    data: DataList
 
     @abstractmethod
     def run(self):
@@ -121,6 +124,10 @@ class MenuController:
 
     def prev_menu(self) -> None:
         if not self.parent:
+            for menu in self.menus.values():
+                if not hasattr(menu, "data"):
+                    continue
+                menu.data.save_data()
             default_console.print("[error]Exiting Application...")
             exit()
 
