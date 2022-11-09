@@ -1,3 +1,4 @@
+# TODO: Move derived data object and data list classes to app.py!
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
