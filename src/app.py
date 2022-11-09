@@ -13,6 +13,13 @@ class FileType(Enum):
     TXT = auto()
 
 
+class MenuEnum(Enum):
+    MAIN_MENU = "0"
+    ORDER_MENU = "1"
+    PRODUCT_MENU = "2"
+    COURIER_MENU = "3"
+
+
 class MainMenu(Menu):
     def __init__(self) -> None:
         self.name = "main_menu"
@@ -23,21 +30,22 @@ class MainMenu(Menu):
             "Exit Application",
         )
 
-    def run(self, cmd: str = "") -> str | None:
+    def run(self) -> str | None:
         while True:
             console.print(self)
             cmd = console.input("[prompt]>>> ")
-            if cmd == "0":
-                break
-            elif cmd == "1":
-                return "order_menu"
-            elif cmd == "2":
-                return "product_menu"
-            elif cmd == "3":
-                return "courier_menu"
-            else:
-                console.clear()
-                console.print("[warn]Invalid Input!\n")
+            match cmd:
+                case "0":
+                    break
+                case MenuEnum.ORDER_MENU.value:
+                    return "order_menu"
+                case MenuEnum.PRODUCT_MENU.value:
+                    return "product_menu"
+                case MenuEnum.COURIER_MENU.value:
+                    return "courier_menu"
+                case _:
+                    console.clear()
+                    console.print("[warn]Invalid Input!\n")
 
 
 class ProductMenu(Menu):
@@ -53,7 +61,7 @@ class ProductMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             console.print(self)
             cmd = console.input("[prompt]>>> ")
@@ -95,7 +103,7 @@ class CourierMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             console.print(self)
             cmd = console.input("[prompt]>>> ")
@@ -135,7 +143,7 @@ class OrderMenu(Menu):
         self.parent_menu = parent_menu
         self.data = data
 
-    def run(self, cmd: str = "") -> None:
+    def run(self) -> None:
         while True:
             console.print(self)
             cmd = console.input("[prompt]>>> ")
