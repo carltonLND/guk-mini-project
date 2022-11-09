@@ -1,1 +1,2 @@
-from .data_objects import Courier, CourierList, Order, OrderList, Product, ProductList
+from .data_objects import (Courier, CourierList, DataList, DataObject, Order,
+                           OrderList, Product, ProductList)
