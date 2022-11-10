@@ -98,8 +98,11 @@ class ProductMenu(Menu):
         new_data = {}
         for key in data.__dict__.keys():
             console.print("Enter New Values (Leave Blank To Skip):")
-            new_data[key] = console.input(f"[prompt]{key.title()}\n>>> ")
-        data.update(**new_data)
+            new_value = console.input(f"[prompt]{key.title()}\n>>> ")
+            if not new_value:
+                continue
+            new_data[key] = new_value
+            data.update(**new_data)
         console.clear()
         console.print("[notify]Product Updated!")
 
