@@ -54,9 +54,8 @@ class DataList(ABC):
         self.handler = file_handler
         self.load_data()
 
-    @abstractmethod
-    def add_data(self, *, data: DataObject):
-        pass
+    def add_data(self, *, data: DataObject) -> None:
+        self._list.append(data)
 
     @abstractmethod
     def get_data(self, *, target: int) -> DataObject:
@@ -88,9 +87,6 @@ class DataList(ABC):
 
 
 class OrderList(DataList):
-    def add_data(self, *, order: Order) -> None:
-        self._list.append(order)
-
     def get_data(self, *, target: int) -> Order:
         return self._list[target]
 
@@ -118,9 +114,6 @@ class OrderList(DataList):
 
 
 class ProductList(DataList):
-    def add_data(self, *, data: Product) -> None:
-        self._list.append(data)
-
     def get_data(self, *, target: int) -> Product:
         return self._list[target]
 
@@ -150,9 +143,6 @@ class ProductList(DataList):
 
 
 class CourierList(DataList):
-    def add_data(self, *, courier: Courier) -> None:
-        self._list.append(courier)
-
     def get_data(self, *, target: int) -> Courier:
         return self._list[target]
 
