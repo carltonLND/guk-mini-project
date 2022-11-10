@@ -1,6 +1,5 @@
 # TODO: Move derived data object and data list classes to app.py?
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 
 from file_handlers.handler import Handler
 
@@ -15,24 +14,38 @@ class DataObject(ABC):
 
             setattr(self, key, kwargs[key])
 
+    def __repr__(self) -> str:
+        data_repr = ""
+        for attribute, value in self.__dict__.items():
+            data_repr += f"{attribute}: {value}"
 
-@dataclass(kw_only=True)
+        return data_repr + "\n"
+
+
 class Order(DataObject):
-    name: str
-    address: str
-    phone: int
-    courier: int
-    status: str = field(init=False, default="Preparing")
+    def __init__(
+        self,
+        *,
+        name: str,
+        address: str,
+        phone: int,
+        courier: int,
+    ) -> None:
+        self.name = name
+        self.address = address
+        self.phone = phone
+        self.courier = courier
+        self.status = "Preparing"
 
 
-@dataclass(kw_only=True)
 class Product(DataObject):
-    name: str
+    def __init__(self, *, name: str) -> None:
+        self.name = name
 
 
-@dataclass(kw_only=True)
 class Courier(DataObject):
-    name: str
+    def __init__(self, *, name: str) -> None:
+        self.name = name
 
 
 class DataList(ABC):
@@ -46,11 +59,11 @@ class DataList(ABC):
         pass
 
     @abstractmethod
-    def get_data(self):
+    def get_data(self, *, target: int) -> DataObject:
         pass
 
     @abstractmethod
-    def delete_data(self):
+    def delete_data(self, *, target: int):
         pass
 
     @abstractmethod

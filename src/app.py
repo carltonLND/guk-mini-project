@@ -73,11 +73,9 @@ class ProductMenu(Menu):
             elif cmd == "2":
                 self.add_product()
             elif cmd == "3":
-                console.clear()
-                console.print("[warn]Not Yet Implemented!\n")
+                self.update_product()
             elif cmd == "4":
-                console.clear()
-                console.print("[warn]Not Yet Implemented!\n")
+                self.del_product()
             else:
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
@@ -88,6 +86,28 @@ class ProductMenu(Menu):
         self.data.add_data(data=new_product)
         console.clear()
         console.print("[notify]Product Added!\n")
+
+    def update_product(self):
+        console.clear()
+        console.print(self.data)
+        console.print("[notify]Choose Product To Update:\n")
+        data_index = int(console.input("[prompt]>>> ")) - 1
+        data = self.data.get_data(target=data_index)
+        new_data = {}
+        for key in data.__dict__.keys():
+            console.print("Enter New Values (Leave Blank To Skip):")
+            new_data[key] = console.input(f"[prompt]{key.title()}\n>>> ")
+        data.update(**new_data)
+        console.print("[notify]Product Updated!")
+
+    def del_product(self):
+        console.clear()
+        console.print(self.data)
+        console.print("[notify]Choose Product To Delete:\n")
+        product_index = int(console.input("[prompt]>>> ")) - 1
+        self.data.delete_data(target=product_index)
+        console.clear()
+        console.print("[notify]Product Deleted!\n")
 
 
 class CourierMenu(Menu):
