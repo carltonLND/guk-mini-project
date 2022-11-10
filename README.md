@@ -47,8 +47,11 @@ conda activate <env>
 git clone https://github.com/carltonlnd/guk-mini-project.git cafe-cli/
 cd cafe-cli
 
-docker build .
+docker build -t cafe-cli .
 docker run -it cafe-cli
+
+
+docker start -i cafe-cli
 ```
 
 ### TODO:

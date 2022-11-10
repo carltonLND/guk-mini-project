@@ -1,6 +1,5 @@
 FROM python:3.10.7
-WORKDIR /application
 COPY . ./
-VOLUME /application/data
+VOLUME /data
 RUN pip install -r requirements.txt
-CMD python /application/src/app.py
+CMD python /src/app.py
