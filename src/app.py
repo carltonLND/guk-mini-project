@@ -80,6 +80,8 @@ class ProductMenu(Menu):
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
 
+    # TODO: There's a lot wrong with this approach from a design perspective
+    # that will require a large refactor in the near future
     def add_product(self):
         console.print("[notify]Enter Product Name:\n")
         new_product = db.Product(name=console.input("[prompt]>>> "))
@@ -98,6 +100,7 @@ class ProductMenu(Menu):
             console.print("Enter New Values (Leave Blank To Skip):")
             new_data[key] = console.input(f"[prompt]{key.title()}\n>>> ")
         data.update(**new_data)
+        console.clear()
         console.print("[notify]Product Updated!")
 
     def del_product(self):
@@ -160,6 +163,7 @@ class OrderMenu(Menu):
             "Delete Order",
             "Main Menu",
         )
+        self.status_options = ("Preparing", "On The Way", "Delivered", "Canceled")
         self.parent_menu = parent_menu
         self.data = data
 
@@ -178,40 +182,56 @@ class OrderMenu(Menu):
                     console.print("No Couriers Available\n")
                     continue
 
-                console.print("Enter Client Name:\n")
-                name = input(">>> ")
-
-                console.print("Enter Client Address:\n")
-                address = input(">>> ")
-
-                phone = self.get_int_input("Enter Client Phone Number:\n")
-
-                courier_data = self.sibling_menus["courier_menu"].data
-                console.print(courier_data)
-                courier = self.get_int_input("Select Courier By Number:\n")
-                while courier not in range(1, len(courier_data) + 1):
-                    console.print("Invalid Input!\n")
-                    console.print(courier_data)
-                    courier = self.get_int_input("Select Courier By Number:\n")
-
-                new_order = db.Order(
-                    name=name, address=address, phone=phone, courier=courier
-                )
-                self.data.add_data(data=new_order)
-                console.clear()
-                console.print("Order Added!\n")
+                self.create_order()
             elif cmd == "3":
                 console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             elif cmd == "4":
                 console.clear()
-                console.print("[warn]Not Yet Implemented!\n")
+                self.update_status()
             elif cmd == "5":
                 console.clear()
                 console.print("[warn]Not Yet Implemented!\n")
             else:
                 console.clear()
                 console.print("[warn]Invalid Input!\n")
+
+    def create_order(self):
+        console.print("Enter Client Name:\n")
+        name = input(">>> ")
+
+        console.print("Enter Client Address:\n")
+        address = input(">>> ")
+
+        phone = self.get_int_input("Enter Client Phone Number:\n")
+
+        courier_data = self.sibling_menus["courier_menu"].data
+        console.print(courier_data)
+        courier = self.get_int_input("Select Courier By Number:\n")
+        while courier not in range(1, len(courier_data) + 1):
+            console.print("Invalid Input!\n")
+            console.print(courier_data)
+            courier = self.get_int_input("Select Courier By Number:\n")
+
+        new_order = db.Order(name=name, address=address, phone=phone, courier=courier)
+        self.data.add_data(data=new_order)
+        console.clear()
+        console.print("Order Added!\n")
+
+    def update_status(self):
+        console.print(self.data)
+        console.print("[notify]Choose Order To Update Status:\n")
+        data_index = int(console.input("[prompt]>>> ")) - 1
+        data = self.data.get_data(target=data_index)
+        console.clear()
+        console.print("[notify]Choose New Status:\n")
+        for num, status in enumerate(self.status_options, 1):
+            console.print(f"{num}) {status}")
+
+        status_index = int(console.input("\n[prompt]>>> ")) - 1
+        data.update(status=self.status_options[status_index])
+        console.clear()
+        console.print("[notify]Status Updated!\n")
 
 
 def handler_factory(file_type: FileType) -> Handler:
