@@ -1,7 +1,3 @@
-from os import stat
-
-from db import ABCDataController
-
 from .menu import Menu
 
 
@@ -17,7 +13,7 @@ class OrderMenu(Menu):
         "Return",
     )
 
-    def __init__(self, data_controller: ABCDataController) -> None:
+    def __init__(self, data_controller) -> None:
         self.commands = {
             1: self.print_orders,
             2: self.add_order,

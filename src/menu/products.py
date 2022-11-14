@@ -1,5 +1,3 @@
-from db import ABCDataController
-
 from .menu import Menu
 
 
@@ -14,7 +12,7 @@ class ProductMenu(Menu):
         "Return",
     )
 
-    def __init__(self, data_controller: ABCDataController) -> None:
+    def __init__(self, data_controller) -> None:
         self.commands = {
             1: self.print_products,
             2: self.add_product,

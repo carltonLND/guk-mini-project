@@ -3,20 +3,20 @@
 import os
 from pathlib import Path
 
-from db import CourierList, DataController, OrderList, ProductList
+from db import CourierList, CsvDataController, OrderList, ProductList
 from file_handlers import CsvHandler
 from menu import CourierMenu, MainMenu, OrderMenu, ProductMenu
 
 DATA_DIR = os.path.join(Path(__file__).parent.parent, "data/")
 
 
-def data_factory(data_dir) -> DataController:
+def data_factory(data_dir) -> CsvDataController:
     """Factory that returns our constructed data controller"""
     handler = CsvHandler(data_dir=data_dir)
     orders = OrderList()
     products = ProductList()
     couriers = CourierList()
-    return DataController(
+    return CsvDataController(
         handler=handler, orders=orders, products=products, couriers=couriers
     )
 
@@ -32,10 +32,10 @@ def menu_factory(data_controller) -> MainMenu:
 def main():
     """Setup and run cafe-cli"""
     data_controller = data_factory(DATA_DIR)
-    data_controller.load_csv()
+    data_controller.load()
     app = menu_factory(data_controller)
     app.loop()
-    data_controller.save_csv()
+    data_controller.save()
     print("Exiting Application!")
 
 

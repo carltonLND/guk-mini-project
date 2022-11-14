@@ -1,4 +1,4 @@
-from file_handlers import CsvHandler
+from typing import Protocol
 
 from .data import Data, DataList
 
@@ -57,6 +57,16 @@ class Order(Data):
         return string + "\n"
 
 
+class CsvOrderHandlerProto(Protocol):
+    def save_file(
+        self, filename: str, fieldnames: list[str], data: list[Order]
+    ) -> None:
+        ...
+
+    def load_file(self, filename: str) -> list[dict]:
+        ...
+
+
 class OrderList(DataList):
     """Object representing a collecting of Order types"""
 
@@ -67,11 +77,11 @@ class OrderList(DataList):
     def create(self, **kwargs):
         self._data_list.append(Order(**kwargs))
 
-    def save_csv(self, handler: CsvHandler):
+    def save_csv(self, handler: CsvOrderHandlerProto):
         fieldnames = ["name", "address", "phone", "courier", "status", "items"]
         handler.save_file("orders", fieldnames, data=self._data_list)
 
-    def load_csv(self, handler: CsvHandler):
+    def load_csv(self, handler: CsvOrderHandlerProto):
         raw_data = handler.load_file("orders")
         if not raw_data:
             return

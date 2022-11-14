@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from file_handlers import CsvHandler
-
 
 class ABCData(ABC):
     """Abstract interface representing data"""
@@ -93,32 +91,3 @@ class DataList(ABCDataList):
             string += f"{num}) {data}"
 
         return string
-
-
-class ABCDataController(ABC):
-    """Abstract class for DataController's"""
-
-
-class DataController(ABCDataController):
-    """Controller for accessing DataList objects"""
-
-    def __init__(self, handler: CsvHandler, **data_lists: ABCDataList) -> None:
-        for name, data_list in data_lists.items():
-            setattr(self, name, data_list)
-        self.handler = handler
-
-    def load_csv(self):
-        print("Loading...\n")
-        for name, data_list in self.__dict__.items():
-            if name == "handler":
-                continue
-
-            data_list.load_csv(self.handler)
-
-    def save_csv(self):
-        print("Saving...\n")
-        for name, data_list in self.__dict__.items():
-            if name == "handler":
-                continue
-
-            data_list.save_csv(self.handler)
