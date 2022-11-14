@@ -88,7 +88,7 @@ As a user I want to:
 - create a product and add it to a list
 - view all products
 - _STRETCH_ update or delete a product
-
+  <br/><br/>
 - A product should just be a string containing its name, i.e: "Coke Zero"
 - A list of products should be a list of strings , i.e: ["Coke Zero"]
 
@@ -99,7 +99,7 @@ As a user I want to:
 - create a product or order and add it to a list
 - view all products or orders
 - _STRETCH_ I want to be able to update or delete a product or order
-
+  <br/><br/>
 - A product should just be a string containing its name, i.e: "Coke Zero"
 - A list of products should be a list of strings, i.e: ["Coke Zero"]
 - An order should be a dict, i.e:
@@ -124,7 +124,7 @@ As a user I want to:
 - update the status of an order
 - persist my data (products and couriers)
 - _STRETCH_ update or delete a product, order, or courier
-
+  <br/><br/>
 - A product should just be a string containing its name, i.e: "Coke Zero"
 - A list of products should be a list of strings, i.e: ["Coke Zero"]
 - A courier should just be a string containing its name, i.e: "John"
@@ -159,7 +159,7 @@ As a user I want to:
 - persist my data
 - _STRETCH_ update or delete a product, order, or courier
 - _BONUS_ list orders by status or courier
-
+  <br/><br/>
 - A product should be a dict, i.e:
 
 ```python
@@ -185,9 +185,9 @@ As a user I want to:
 "customer_name": "John",
 "customer_address": "Unit 2, 12 Main Street, LONDON, WH1 2ER",
 "customer_phone": "0789887334",
-"courier": 2, // Courier index
+"courier": 2, # Courier index
 "status": "preparing",
-"items": "1, 3, 4" // Product index
+"items": "1, 3, 4" # Product index
 }
 ```
 
