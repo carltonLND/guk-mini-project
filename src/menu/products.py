@@ -29,9 +29,10 @@ class ProductMenu(Menu):
     def add_product(self) -> bool:
         new_product = {}
         new_product["name"] = input("Product name:\n\n>>> ")
-        new_product["price"] = float(input("Product price:\n\n>>> "))
+        new_product["price"] = self._ensure_float("Product price:\n\n>>> ")
 
         if not self._confirm(new_product):
+            print("No changes made\n")
             return True
 
         self.data_controller.products.create(**new_product)
@@ -44,7 +45,12 @@ class ProductMenu(Menu):
 
         product = self.data_controller.products.get(choice - 1)
         new_product = self._prompt_update(product.__dict__)
+        if not new_product:
+            print("No changes made\n")
+            return True
+
         if not self._confirm(new_product):
+            print("No changes made\n")
             return True
 
         product.update(**new_product)
@@ -56,6 +62,7 @@ class ProductMenu(Menu):
             return True
 
         if not self._confirm():
+            print("No changes made\n")
             return True
 
         self.data_controller.products.delete(choice - 1)

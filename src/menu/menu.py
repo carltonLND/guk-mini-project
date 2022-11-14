@@ -47,16 +47,20 @@ class Menu(ABCMenu):
         if option_0:
             if 0 > choice or choice > (len(options) - 1):
                 return self.select(options=options)
-        else:
-            if 0 > choice or choice > len(options):
-                return self.select(options=options, option_0=False)
+
+        if 0 > choice or choice > len(options):
+            return self.select(options=options, option_0=False)
 
         return choice
 
     def _prompt_update(self, data: dict) -> dict:
         new_columns = {}
         for column in data.keys():
-            new = input(f"New {column}:\n\n>>> ")
+            if column == "price":
+                new = self._ensure_float(f"New {column}:\n\n>>> ")
+            else:
+                new = input(f"New {column}:\n\n>>> ")
+
             if not new:
                 continue
 
@@ -74,6 +78,13 @@ class Menu(ABCMenu):
             return False
 
         return True
+
+    def _ensure_float(self, prompt) -> float:
+        try:
+            return round(float(input(prompt)), 2)
+        except ValueError:
+            print("Invalid number (e.g. 0.90)")
+            return self._ensure_float(prompt)
 
     def __len__(self):
         return len(self._OPTIONS)

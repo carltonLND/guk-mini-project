@@ -32,6 +32,7 @@ class CourierMenu(Menu):
         new_courier["phone"] = int(input("Courier phone:\n\n>>> "))
 
         if not self._confirm(new_courier):
+            print("No changes made\n")
             return True
 
         self.data_controller.couriers.create(**new_courier)
@@ -44,7 +45,12 @@ class CourierMenu(Menu):
 
         courier = self.data_controller.couriers.get(choice - 1)
         new_courier = self._prompt_update(courier.__dict__)
+        if not new_courier:
+            print("No changes made\n")
+            return True
+
         if not self._confirm(new_courier):
+            print("No changes made\n")
             return True
 
         courier.update(**new_courier)
@@ -56,6 +62,7 @@ class CourierMenu(Menu):
             return True
 
         if not self._confirm():
+            print("No changes made\n")
             return True
 
         self.data_controller.couriers.delete(choice - 1)

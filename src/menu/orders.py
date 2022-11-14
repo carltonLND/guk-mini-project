@@ -45,6 +45,7 @@ class OrderMenu(Menu):
         new_order["courier"] = self._prompt_courier()
         new_order["items"] = self._prompt_items()
         if not self._confirm(new_order):
+            print("No changes made\n")
             return True
 
         self.data_controller.orders.create(**new_order)
@@ -59,9 +60,11 @@ class OrderMenu(Menu):
         status_list = self.data_controller.orders.status_list
         status = self._prompt_update_status(order, status_list)
         if not status:
+            print("No changes made\n")
             return True
 
         if not self._confirm():
+            print("No changes made\n")
             return True
 
         order.update_status(status_list[status - 1])
@@ -74,7 +77,12 @@ class OrderMenu(Menu):
 
         order = self.data_controller.orders.get(choice - 1)
         new_order = self._prompt_update(order.__dict__)
+        if not new_order:
+            print("No changes made\n")
+            return True
+
         if not self._confirm(new_order):
+            print("No changes made\n")
             return True
 
         order.update(**new_order)
@@ -87,6 +95,7 @@ class OrderMenu(Menu):
             return True
 
         if not self._confirm():
+            print("No changes made\n")
             return True
 
         self.data_controller.orders.delete(choice - 1)
