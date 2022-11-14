@@ -1,13 +1,8 @@
 """CLI menu interface for a pop-up coffee shop management system"""
 
-import os
-from pathlib import Path
+from src import *
 
-from db import CourierList, CsvDataController, OrderList, ProductList
-from file_handlers import CsvHandler
-from menu import CourierMenu, MainMenu, OrderMenu, ProductMenu
-
-DATA_DIR = os.path.join(Path(__file__).parent.parent, "data/")
+DATA_DIR = "data/"
 
 
 def data_factory(data_dir) -> CsvDataController:
