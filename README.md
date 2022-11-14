@@ -1,6 +1,6 @@
 # Café Management CLI
 
-A **hopefully** somewhat simple CLI application to manage and track orders.
+A **hopefully** somewhat simple CLI application to manage and track orders, products and couriers for a pop-up coffee shop.
 
 ## Current Features
 
