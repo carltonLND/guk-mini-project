@@ -165,7 +165,7 @@ As a user I want to:
 ```python
 {
 "name": "Coke Zero",
-"price": 0.8 // Float
+"price": 0.8 # Float
 }
 ```
 
