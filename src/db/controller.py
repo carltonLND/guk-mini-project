@@ -1,7 +1,9 @@
 from typing import Protocol
 
+from .data import ABCDataController
 
-class CsvAnyHandlerProto(Protocol):
+
+class CsvHandlerProto(Protocol):
     def save_file(self, filename: str, fieldnames: list[str], data: list) -> None:
         ...
 
@@ -9,19 +11,19 @@ class CsvAnyHandlerProto(Protocol):
         ...
 
 
-class DataListProto(Protocol):
-    def save_csv(self, handler: CsvAnyHandlerProto) -> None:
+class CsvDataListProto(Protocol):
+    def save_csv(self, handler: CsvHandlerProto) -> None:
         ...
 
-    def load_csv(self, handler: CsvAnyHandlerProto) -> None:
+    def load_csv(self, handler: CsvHandlerProto) -> None:
         ...
 
 
-class CsvDataController:
+class CsvDataController(ABCDataController):
     """Controller for accessing DataList objects"""
 
     def __init__(
-        self, handler: CsvAnyHandlerProto, **data_lists: DataListProto
+        self, handler: CsvHandlerProto, **data_lists: CsvDataListProto
     ) -> None:
         for name, data_list in data_lists.items():
             setattr(self, name, data_list)

@@ -91,3 +91,13 @@ class DataList(ABCDataList):
             string += f"{num}) {data}"
 
         return string
+
+
+class ABCDataController(ABC):
+    @abstractmethod
+    def load(self) -> None:
+        pass
+
+    @abstractmethod
+    def save(self) -> None:
+        pass
