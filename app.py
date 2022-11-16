@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """CLI menu interface for a pop-up coffee shop management system"""
 
 from src import *
