@@ -22,8 +22,12 @@ class Order(Data):
         self.status = status
         self.items = items
 
-    def update(self, **kwargs):
+    def update(self, status=False, **kwargs):
         """Method for updating already existing attributes of self"""
+
+        if status:
+            self.status = status
+
         for key in kwargs.keys():
             if not hasattr(self, key):
                 continue
@@ -35,10 +39,6 @@ class Order(Data):
                 continue
 
             setattr(self, key, kwargs[key])
-
-    def update_status(self, status: str):
-        """Method for updating already existing attributes of self"""
-        self.status = status
 
     def print_status_list(self, status_list: tuple[str]) -> None:
         for num, data in enumerate(status_list, 1):
@@ -54,7 +54,7 @@ class Order(Data):
 
             string += f"{attribute}: {value} | "
 
-        return string + "\n"
+        return string
 
 
 class CsvOrderHandlerProto(Protocol):

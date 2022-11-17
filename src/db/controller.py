@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from .data import ABCDataController
+from .data import ABCData, ABCDataController
 
 
 class CsvHandlerProto(Protocol):
@@ -12,6 +12,18 @@ class CsvHandlerProto(Protocol):
 
 
 class CsvDataListProto(Protocol):
+    def create(self, **kwargs) -> None:
+        ...
+
+    def get(self, index: int) -> ABCData:
+        ...
+
+    def delete(self, index: int) -> None:
+        ...
+
+    def empty(self) -> bool:
+        ...
+
     def save_csv(self, handler: CsvHandlerProto) -> None:
         ...
 
@@ -26,11 +38,19 @@ class CsvDataController(ABCDataController):
         self, handler: CsvHandlerProto, **data_lists: CsvDataListProto
     ) -> None:
         for name, data_list in data_lists.items():
-            setattr(self, name, data_list)
+            if name == "products":
+                self.products = data_list
+            if name == "orders":
+                self.orders = data_list
+            if name == "couriers":
+                self.couriers = data_list
+
+            else:
+                setattr(self, name, data_list)
+
         self.handler = handler
 
     def load(self):
-        print("Loading...\n")
         for name, data_list in self.__dict__.items():
             if name == "handler":
                 continue
@@ -38,7 +58,6 @@ class CsvDataController(ABCDataController):
             data_list.load_csv(self.handler)
 
     def save(self):
-        print("Saving...\n")
         for name, data_list in self.__dict__.items():
             if name == "handler":
                 continue

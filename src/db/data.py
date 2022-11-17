@@ -21,7 +21,7 @@ class ABCDataList(ABC):
         pass
 
     @abstractmethod
-    def get(self, index: int) -> list:
+    def get(self, index: int) -> ABCData:
         pass
 
     @abstractmethod
@@ -59,7 +59,7 @@ class Data(ABCData):
         for attribute, value in self.__dict__.items():
             string += f"{attribute}: {value} | "
 
-        return string + "\n"
+        return string
 
 
 class DataList(ABCDataList):
@@ -67,10 +67,10 @@ class DataList(ABCDataList):
 
     _data_list: list
 
-    def __init__(self, *data_objects: Data) -> None:
+    def __init__(self, *data_objects: ABCData) -> None:
         self._data_list = [*data_objects]
 
-    def get(self, index: int) -> list:
+    def get(self, index: int) -> ABCData:
         return self._data_list[index]
 
     def delete(self, index: int) -> None:
@@ -80,17 +80,17 @@ class DataList(ABCDataList):
         return True if not self._data_list else False
 
     def __len__(self) -> int:
-        return len(self._data_list) + 1
+        return len(self._data_list)
 
     def __str__(self) -> str:
         if not self._data_list:
-            return "No Data!\n"
+            return "No Data!"
 
         string = ""
         for num, data in enumerate(self._data_list, 1):
-            string += f"{num}) {data}"
+            string += f"{num}) {data}\n"
 
-        return string
+        return string.rstrip()
 
 
 class ABCDataController(ABC):
