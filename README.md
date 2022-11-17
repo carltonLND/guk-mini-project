@@ -14,6 +14,10 @@ A **hopefully** somewhat simple CLI application to manage and track orders, prod
 
 - Data persistence in CSV format
 
+## Extra Branch: cli-frontend
+
+- A redesigned frontend utilizing Typer
+
 ## Dependencies
 
 - Python 3.10.7+
