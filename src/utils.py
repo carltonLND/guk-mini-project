@@ -20,6 +20,9 @@ def ensure_float(prompt: str, default=None) -> float:
 def ensure_int(prompt: str, options=None, default=None) -> int:
     choice = typer.prompt(prompt, default=default, show_default=False)
 
+    if not choice:
+        return choice
+
     try:
         choice = int(choice)
     except ValueError:
