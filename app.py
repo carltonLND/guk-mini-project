@@ -3,7 +3,6 @@
 
 import typer
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import select
 
 from src.db import couriers_table, orders_table, products_table, setup_lite_db
 from src.domain import Courier, Order, Product, Repository
@@ -161,12 +160,7 @@ def order_add():
 
     products = repo.list(products_table)
     print(products)
-    items = ""
-    while True:
-        item = str(ensure_int("Product ID", products, default=""))
-        if not item:
-            break
-        items += f"{item},"
+    items = select_items(products)
     if not items:
         raise typer.Abort()
 
@@ -177,6 +171,7 @@ def order_add():
         courier_id=courier,
         item_ids=items.rstrip(","),
     )
+
     repo.add(new_order)
     if not confirm():
         repo.discard()
