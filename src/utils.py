@@ -78,16 +78,12 @@ def select_status():
 
 
 def select_items(choices):
-    print(choices)
-    print("0) Done\n")
-    items = []
+    items = ""
     while True:
-        item = ensure_int("Product number", options=choices)
+        item = str(ensure_int("Product ID", choices, default=""))
         if not item:
             break
-
-        print("Item added")
-        items.append(item)
+        items += f"{item},"
 
     return items
 
