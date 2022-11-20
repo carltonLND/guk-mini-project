@@ -9,7 +9,7 @@ couriers_table = Table(
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String, nullable=False),
-    Column("price", Integer, nullable=False),
+    Column("phone", Integer, nullable=False),
 )
 
 mapper_registry.map_imperatively(Courier, couriers_table)
