@@ -1,5 +1,2 @@
 TODO:
-    - Add specific get operation to see all information
-    - Seperate Repo's per table
-    - Format representation of data
-    - Input validation for orders when selecting items/couriers that don't exist
+    - Add help information
