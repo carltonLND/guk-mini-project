@@ -32,7 +32,7 @@ class ABCRepo(ABC):
         pass
 
 
-class SQLRepo(ABCRepo):
+class SQLiteRepo(ABCRepo):
     """Repository for handling session operations"""
 
     def __init__(self, table, session: Session) -> None:
@@ -84,13 +84,15 @@ class CsvRepo(ABCRepo):
         self._data.append(row)
 
     def update(self, id, row) -> None:
-        self._data[id] = row
+        data = self._data[id - 1]
+        for key, value in row.items():
+            setattr(data, key, value)
 
     def delete(self, id) -> None:
-        self._data.pop(id)
+        self._data.pop(id - 1)
 
     def get(self, id):
-        return self._data[id]
+        return self._data[id - 1]
 
     def all(self) -> list:
         return self._data
