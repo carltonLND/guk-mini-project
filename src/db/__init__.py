@@ -11,9 +11,11 @@ map_products(mapper_registry)
 map_couriers(mapper_registry)
 map_orders(mapper_registry)
 
+DATA_PATH = "data/cafe.db"
+
 
 def setup_lite_db():
-    engine = create_engine(f"sqlite:///data/cafe.db")
+    engine = create_engine(f"sqlite:///{DATA_PATH}")
     mapper_registry.metadata.create_all(bind=engine, checkfirst=True)
     return engine
 

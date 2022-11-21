@@ -17,7 +17,7 @@ def courier_default(
     if ctx.invoked_subcommand is not None:
         return
 
-    courier_list = courier_repo.list()
+    courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
         raise typer.Abort()
@@ -46,7 +46,7 @@ def courier_add():
 
 @courier_app.command("update")
 def courier_update():
-    courier_list = courier_repo.list()
+    courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
         raise typer.Abort()
@@ -74,7 +74,7 @@ def courier_update():
 
 @courier_app.command("delete")
 def courier_delete():
-    courier_list = courier_repo.list()
+    courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
         raise typer.Abort()

@@ -1,5 +1,4 @@
 import typer
-from sqlalchemy.orm import close_all_sessions
 
 from src.db import create_lite_session
 from src.domain import Courier, Order, Product, SQLRepo
@@ -22,7 +21,7 @@ def order_default(
     if ctx.invoked_subcommand is not None:
         return
 
-    order_list = order_repo.list()
+    order_list = order_repo.all()
     if not order_list:
         print("No Orders!")
         raise typer.Abort()
@@ -43,12 +42,12 @@ def order_default(
 
 @order_app.command("add")
 def order_add():
-    courier_list = courier_repo.list()
+    courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
         raise typer.Abort()
 
-    product_list = product_repo.list()
+    product_list = product_repo.all()
     if not product_list:
         print("No Products!")
         raise typer.Abort()
@@ -77,7 +76,7 @@ def order_add():
 
 @order_app.command("status")
 def order_status():
-    order_list = order_repo.list()
+    order_list = order_repo.all()
     if not order_list:
         print("No orders!")
         raise typer.Abort()
@@ -101,7 +100,7 @@ def order_status():
 
 @order_app.command("update")
 def order_update():
-    order_list = order_repo.list()
+    order_list = order_repo.all()
     if not order_list:
         print("No orders!")
         raise typer.Abort()
@@ -125,10 +124,10 @@ def order_update():
             "Phone", default=old_order.customer_phone, show_default=True
         ),
         "courier_id": select_courier(
-            courier_repo.list(), default=old_order.courier_id, show_default=True
+            courier_repo.all(), default=old_order.courier_id, show_default=True
         ),
         "item_ids": select_items(
-            product_repo.list(), default=old_order.item_ids, show_default=True
+            product_repo.all(), default=old_order.item_ids, show_default=True
         ),
     }
 
@@ -142,7 +141,7 @@ def order_update():
 
 @order_app.command("delete")
 def order_delete():
-    order_list = order_repo.list()
+    order_list = order_repo.all()
     if not order_list:
         print("No orders!")
         raise typer.Abort()

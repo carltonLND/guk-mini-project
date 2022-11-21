@@ -17,7 +17,7 @@ def product_default(
     if ctx.invoked_subcommand is not None:
         return
 
-    product_list = product_repo.list()
+    product_list = product_repo.all()
     if not product_list:
         print("No Products!")
         raise typer.Abort()
@@ -47,7 +47,7 @@ def product_add():
 
 @product_app.command("update")
 def product_update():
-    product_list = product_repo.list()
+    product_list = product_repo.all()
     if not product_list:
         print("No Products!")
         raise typer.Abort()
@@ -75,7 +75,7 @@ def product_update():
 
 @product_app.command("delete")
 def product_delete():
-    product_list = product_repo.list()
+    product_list = product_repo.all()
     if not product_list:
         print("No Products!")
         raise typer.Abort()
