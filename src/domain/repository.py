@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import Table
 from sqlalchemy.orm import Session
 
 
@@ -26,31 +25,32 @@ class ABCRepo(ABC):
         pass
 
 
-class SQLProductRepo(ABCRepo):
+class SQLRepo(ABCRepo):
     """Repository for handling session operations"""
 
-    def __init__(self, session: Session) -> None:
+    def __init__(self, table, session: Session) -> None:
+        self.table = table
         self.session = session
 
-    def add(self, model) -> None:
-        """Adds model to database session"""
-        self.session.add(model)
+    def add(self, row) -> None:
+        """Adds row to database session"""
+        self.session.add(row)
 
-    def update(self, table, id, model):
+    def update(self, id, row):
         """Updates row with new changes"""
-        self.session.query(table).filter_by(id=id).update(model)
+        self.session.query(self.table).filter_by(id=id).update(row)
 
-    def delete(self, table: Table, id: int):
+    def delete(self, id: int):
         """Deletes row in table by unique ID"""
-        self.session.query(table).filter_by(id=id).delete()
+        self.session.query(self.table).filter_by(id=id).delete()
 
-    def get(self, table: Table, id: int):
+    def get(self, id: int):
         """Returns row in table based on filter reference"""
-        return self.session.query(table).filter_by(id=id).one()
+        return self.session.query(self.table).filter_by(id=id).one()
 
-    def list(self, table: Table) -> list:
+    def list(self) -> list:
         """Returns list of all rows in table, or empty list"""
-        return self.session.query(table).all()
+        return self.session.query(self.table).all()
 
     def save(self) -> None:
         """Commit transaction changes to database"""

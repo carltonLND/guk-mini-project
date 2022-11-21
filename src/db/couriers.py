@@ -2,14 +2,16 @@ from sqlalchemy import Column, Integer, String, Table
 
 from src.domain import Courier
 
-from .registry import mapper_registry
 
-couriers_table = Table(
-    "couriers",
-    mapper_registry.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("phone", Integer, nullable=False),
-)
+def map_couriers(registry):
+    """Imperatively maps Courier object to DB table"""
 
-mapper_registry.map_imperatively(Courier, couriers_table)
+    couriers_table = Table(
+        "couriers",
+        registry.metadata,
+        Column("id", Integer, primary_key=True),
+        Column("name", String, nullable=False),
+        Column("phone", Integer, nullable=False),
+    )
+
+    registry.map_imperatively(Courier, couriers_table)

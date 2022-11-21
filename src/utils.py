@@ -42,7 +42,8 @@ def select_status():
 
 
 def select_courier(choices, default=None, show_default=False):
-    print(choices)
+    for choice in choices:
+        print(f"{choice.id}) {choice.name}")
     print("0) Cancel")
     courier = ensure_int(
         "Courier ID", choices, default=default, show_default=show_default
@@ -54,7 +55,8 @@ def select_courier(choices, default=None, show_default=False):
 
 
 def select_items(choices, default="", show_default=False):
-    print(choices)
+    for choice in choices:
+        print(f"{choice.id}) {choice.name}\n - £{choice.price:.2f}")
     print("0) Done")
     items = ""
     while True:
