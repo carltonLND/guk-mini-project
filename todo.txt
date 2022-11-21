@@ -1,3 +1,4 @@
 TODO:
-
     - Add help information
+    - Update README
+    - Get some tests on the final build!
