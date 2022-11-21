@@ -25,8 +25,8 @@ def product_default(
     for product in product_list:
         if verbose:
             print(
-                f"""{product.id}) {product.name}
-                \r - {product.price}"""
+                f"""{product.id}) Name:  {product.name}
+            \r   Price: £{product.price:.2f}\n"""
             )
         else:
             print(f"{product.id}) {product.name}")

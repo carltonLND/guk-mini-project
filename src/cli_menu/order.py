@@ -30,12 +30,12 @@ def order_default(
     for order in order_list:
         if verbose:
             print(
-                f"""{order.id}) {order.customer_name}
-                \r - {order.customer_address}
-                \r - {order.customer_phone}
-                \r - {order.courier_id}
-                \r - {order.item_ids}
-                \r - {order.status}"""
+                f"""{order.id}) Name:    {order.customer_name}
+                \r   Address: {order.customer_address}
+                \r   Phone:   {order.customer_phone}
+                \r   Courier: {order.courier_id}
+                \r   Items:   {order.item_ids}
+                \r   Status:  {order.status}\n"""
             )
         else:
             print(f"{order.id}) {order.customer_name}\n - {order.status}")

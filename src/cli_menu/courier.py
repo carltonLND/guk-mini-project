@@ -25,8 +25,8 @@ def courier_default(
     for courier in courier_list:
         if verbose:
             print(
-                f"""{courier.id}) {courier.name}
-                \r - {courier.phone}"""
+                f"""{courier.id}) Name:  {courier.name}
+                \r   Phone: {courier.phone}\n"""
             )
         else:
             print(f"{courier.id}) {courier.name}")
