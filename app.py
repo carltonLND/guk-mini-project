@@ -1,39 +1,16 @@
 #!/usr/bin/env python3
 """CLI menu interface for a pop-up coffee shop management system"""
 
-from src import *
+import typer
 
-DATA_DIR = "data/"
+from src.cli_menu import courier_app, order_app, product_app
 
+app = typer.Typer()
 
-def data_factory(data_dir) -> CsvDataController:
-    """Factory that returns our constructed data controller"""
-    handler = CsvHandler(data_dir=data_dir)
-    orders = OrderList()
-    products = ProductList()
-    couriers = CourierList()
-    return CsvDataController(
-        handler=handler, orders=orders, products=products, couriers=couriers
-    )
-
-
-def menu_factory(data_controller) -> MainMenu:
-    """Factory that returns our constructed main menu"""
-    order_menu = OrderMenu(data_controller)
-    product_menu = ProductMenu(data_controller)
-    courier_menu = CourierMenu(data_controller)
-    return MainMenu(order_menu, product_menu, courier_menu)
-
-
-def main():
-    """Setup and run cafe-cli"""
-    data_controller = data_factory(DATA_DIR)
-    data_controller.load()
-    app = menu_factory(data_controller)
-    app.loop()
-    data_controller.save()
-    print("Exiting Application!")
+app.add_typer(product_app, name="products")
+app.add_typer(courier_app, name="couriers")
+app.add_typer(order_app, name="orders")
 
 
 if __name__ == "__main__":
-    main()
+    app()

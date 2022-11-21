@@ -1,1 +1,1 @@
-name,address,phone,courier,status,items
+id,customer_name,customer_address,customer_phone,courier_id,item_ids,status

@@ -1,34 +1,26 @@
 import csv
 import os
 
-from .handler import Handler
 
+class CsvHandler:
+    """Handler for creating, writing and reading csv files"""
 
-class CsvHandler(Handler):
-    """Handler for csv file types"""
+    def __init__(self, filename: str, fieldnames: list[str]) -> None:
+        self.fieldnames = fieldnames
+        self.file = f"data/{filename}.csv"
+        if not os.path.isfile(self.file):
+            open(self.file, "x").close()
 
-    ext = ".csv"
+    def load_file(self) -> list[dict]:
+        """Returns csv data as list of dicts"""
+        with open(self.file, "r") as f:
+            return [row for row in csv.DictReader(f)]
 
-    def __init__(
-        self,
-        data_dir: str,
-    ) -> None:
-        self.data_dir = data_dir
-
-    def load_file(self, filename: str) -> list[dict]:
-        file = self.data_dir + filename + self.ext
-        if not os.path.isfile(file):
-            self._create_file(file)
-            return []
-
-        with open(file, "r") as f:
-            reader = csv.DictReader(f)
-            return [row for row in reader]
-
-    def save_file(self, filename: str, fieldnames: list[str], data: list) -> None:
-        file = self.data_dir + filename + self.ext
-        with open(file, "w") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+    def save_file(self, data: list) -> None:
+        """Saves data to file with selected fieldnames"""
+        with open(self.file, "w") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fieldnames)
             writer.writeheader()
-            for obj in data:
-                writer.writerow(obj.__dict__)
+            for index, row in enumerate(data, 1):
+                row.id = index
+                writer.writerow(row.__dict__)
