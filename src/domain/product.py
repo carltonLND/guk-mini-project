@@ -1,10 +1,8 @@
-from dataclasses import dataclass, field
-
-
-@dataclass
 class Product:
-    """Product dataclass"""
-
-    id: int = field(init=False)
-    name: str
-    price: float
+    def __init__(self, name: str, price: float, id: int | None = None) -> None:
+        self.name = str(name)
+        self.price = float(price)
+        if id == None:
+            self.id = id
+        else:
+            self.id = int(id)
