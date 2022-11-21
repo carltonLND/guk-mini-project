@@ -1,19 +1,23 @@
 import typer
 
 from src.db import create_lite_session
-from src.domain import Product, SQLRepo
+from src.domain import CsvRepo, Product, SQLiteRepo
 from src.utils import confirm, ensure_float, ensure_int
 
-Session = create_lite_session()
-
-product_repo = SQLRepo(Product, Session())
 product_app = typer.Typer()
 
 
 @product_app.callback(invoke_without_command=True)
 def product_default(
-    ctx: typer.Context, verbose: bool = typer.Option(False, "--verbose", "-v")
+    ctx: typer.Context,
+    verbose: bool = typer.Option(False, "--verbose", "-v"),
+    csv: bool = typer.Option(False, "--csv"),
 ):
+    if csv:
+        setup_csv()
+    else:
+        setup_db()
+
     if ctx.invoked_subcommand is not None:
         return
 
@@ -55,7 +59,8 @@ def product_update():
     for product in product_list:
         print(f"{product.id}) {product.name}")
 
-    product_choice = ensure_int("Product ID", product_list, default=0)
+    print("0) Cancel")
+    product_choice = ensure_int("Product ID", product_list, default="Q")
     if not product_choice:
         raise typer.Abort()
 
@@ -83,6 +88,7 @@ def product_delete():
     for product in product_list:
         print(f"{product.id}) {product.name}")
 
+    print("0) Cancel")
     product_choice = ensure_int("Product ID", product_list, default=0)
     if not product_choice:
         raise typer.Abort()
@@ -93,3 +99,16 @@ def product_delete():
         raise typer.Abort()
 
     product_repo.save()
+
+
+def setup_csv():
+    global product_repo
+
+    product_repo = CsvRepo(Product, "products", ["id", "name", "price"])
+
+
+def setup_db():
+    global product_repo
+
+    Session = create_lite_session()
+    product_repo = SQLiteRepo(Product, Session())

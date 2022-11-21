@@ -1,23 +1,24 @@
 import typer
 
 from src.db import create_lite_session
-from src.domain import Courier, Order, Product, SQLRepo
+from src.domain import Courier, CsvRepo, Order, Product, SQLiteRepo
 from src.utils import (confirm, ensure_int, select_courier, select_items,
                        select_status)
-
-Session = create_lite_session()
-
-product_repo = SQLRepo(Product, Session())
-courier_repo = SQLRepo(Courier, Session())
-order_repo = SQLRepo(Order, Session())
 
 order_app = typer.Typer()
 
 
 @order_app.callback(invoke_without_command=True)
 def order_default(
-    ctx: typer.Context, verbose: bool = typer.Option(False, "--verbose", "-v")
+    ctx: typer.Context,
+    verbose: bool = typer.Option(False, "--verbose", "-v"),
+    csv: bool = typer.Option(False, "--csv"),
 ):
+    if csv:
+        setup_csv()
+    else:
+        setup_db()
+
     if ctx.invoked_subcommand is not None:
         return
 
@@ -84,6 +85,7 @@ def order_status():
     for order in order_list:
         print(f"{order.id}) {order.customer_name}\n - {order.status}")
 
+    print("0) Cancel")
     order_choice = ensure_int("Order ID", order_list, default=0)
     if not order_choice:
         raise typer.Abort()
@@ -108,6 +110,7 @@ def order_update():
     for order in order_list:
         print(f"{order.id}) {order.customer_name}\n - {order.item_ids}")
 
+    print("0) Cancel")
     order_choice = ensure_int("Order ID", order_list, default=0)
     if not order_choice:
         raise typer.Abort()
@@ -149,6 +152,7 @@ def order_delete():
     for order in order_list:
         print(f"{order.id}) {order.customer_name}\n - {order.item_ids}")
 
+    print("0) Cancel")
     order_choice = ensure_int("Order ID", order_list, default=0)
     if not order_choice:
         raise typer.Abort()
@@ -159,3 +163,32 @@ def order_delete():
         raise typer.Abort()
 
     order_repo.save()
+
+
+def setup_csv():
+    global product_repo, courier_repo, order_repo
+
+    product_repo = CsvRepo(Product, "products", ["id", "name", "price"])
+    courier_repo = CsvRepo(Courier, "couriers", ["id", "name", "phone"])
+    order_repo = CsvRepo(
+        Order,
+        "orders",
+        [
+            "id",
+            "customer_name",
+            "customer_address",
+            "customer_phone",
+            "courier_id",
+            "item_ids",
+            "status",
+        ],
+    )
+
+
+def setup_db():
+    global product_repo, courier_repo, order_repo
+
+    Session = create_lite_session()
+    product_repo = SQLiteRepo(Product, Session())
+    courier_repo = SQLiteRepo(Courier, Session())
+    order_repo = SQLiteRepo(Order, Session())
