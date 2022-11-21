@@ -14,19 +14,11 @@ def ensure_float(prompt: str, default=None, show_default=False) -> float:
 
 
 def ensure_int(prompt: str, options=None, default=None, show_default=False) -> int:
-    choice = typer.prompt(prompt, default=default, show_default=show_default)
+    choice = int(
+        typer.prompt(prompt, default=default, show_default=show_default, type=int)
+    )
 
-    if not choice or choice == "0":
-        return choice
-
-    try:
-        choice = int(choice)
-    except ValueError:
-        return ensure_int(
-            prompt, options=options, default=default, show_default=show_default
-        )
-
-    if not options:
+    if not choice or not options:
         return choice
 
     for option in options:
@@ -68,7 +60,7 @@ def select_items(choices, default="", show_default=False):
         item = ensure_int(
             "Product ID", choices, default=default, show_default=show_default
         )
-        if not item or item == "0":
+        if not item:
             break
         items += f"{item},"
         default = items.rstrip(",")
