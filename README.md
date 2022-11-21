@@ -14,6 +14,11 @@ A **hopefully** somewhat simple CLI application to manage and track orders, prod
 
 - Data persistence in CSV format
 
+## Extra Branch: cli-frontend
+
+- All of the above
+- A redesigned frontend utilizing [Typer](https://github.com/tiangolo/typer)
+
 ## Dependencies
 
 - Python 3.10.7+
@@ -26,21 +31,10 @@ A **hopefully** somewhat simple CLI application to manage and track orders, prod
 ```
 git clone https://github.com/carltonlnd/guk-mini-project.git cafe-cli/
 cd cafe-cli
-```
 
-#### Pip Users:
-
-```
 python3 -m venv <env>
-source ./<env>/bin/activate
+source ./<env>/bin/activate //windows -> . <env>\Scripts\activate
 pip install -r requirements.txt
-```
-
-#### Conda Users:
-
-```
-conda create --name <env> --file requirements.txt
-conda activate <env>
 ```
 
 ### Build With Docker:
@@ -59,27 +53,27 @@ docker start -i cafe-cli
 ## Goals With This Project
 
 This project is designed around supplied requirements for a pop-up cafe that needs a system to help manage and track order, product and courier information.
-As time progressed these requirements were built upon for adding new features. With the help of sufficient testing, refactoring of the code base should be
-a lot less painful that a typical personal project. Tests were unfortunately not added until 4 weeks into the project, but have already proven to be a
-valuable asset to my development workflow which I will do my utmost to not neglect again.
-
-The biggest hurdle I encountered was trying to implement the Dependency Inversion Principle to this
-project, which I believe I succeeded in for the most part using Composition but falls short in some areas where some classes are more tightly coupled then
-I would have preferred.
+As time progressed these requirements were built upon for adding new features. With the help of sufficient testing, refactoring of the core business logic
+should be a lot safer.
 
 My design philosophy when approaching this project was to design each core feature to be self dependant at a lower level. For example I wanted others
 to be able to use my menu/ or db/ modules to create their own cli CRUD application. This is what led me into implementing dependency inversion and using
 tools such as pythons ABC module as well as Protocols to define interfaces when composing these mechanisms together. An example of this would be that the
 cli menu frontend could be swapped for a traditional cli interface or even a web API without much fuss at all.
 
+The biggest hurdle I encountered was trying to implement the Dependency Inversion Principle to this project, which I believe I succeeded in for the most
+part using Composition but falls short in areas where some classes are more tightly coupled then I would have preferred.
+
 For data persistence we moved from none at all, to TXT files and now to CSV. I expect within the week to be working on consolidating knowledge on SQL and
 Docker to create a Docker image that connects to a MySQL container to supply our data persistence. This project is already dockerized but will require a
 new docker compose file to connect the two images.
 
-All in all this has been a very interesting challenge of following set requirements, and am inspired to try this project in other languages to test my
-own knowledge.
+Given more time I would have loved to incorporate a more user friendly interface, especially when presenting data to the terminal.
 
-### Requirements Week by Week
+I really enjoyed the challenge of adding a second branch with an entirely different frontend. Not only was it fun to dabble in a new framework in [Typer](https://github.com/tiangolo/typer),
+but it made me aware of design flaws within my project that I had previously overlooked with regard to my personal project goal.
+
+### Requirements For Reference
 
 #### Week 1
 
