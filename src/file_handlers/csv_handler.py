@@ -16,10 +16,11 @@ class CsvHandler:
         with open(self.file, "r") as f:
             return [row for row in csv.DictReader(f)]
 
-    def save_file(self, data: list[object]) -> None:
+    def save_file(self, data: list) -> None:
         """Saves data to file with selected fieldnames"""
         with open(self.file, "w") as f:
             writer = csv.DictWriter(f, fieldnames=self.fieldnames)
             writer.writeheader()
-            for row in data:
+            for index, row in enumerate(data, 1):
+                row.id = index
                 writer.writerow(row.__dict__)
