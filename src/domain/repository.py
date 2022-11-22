@@ -31,6 +31,14 @@ class ABCRepo(ABC):
     def delete(self, id):
         pass
 
+    @abstractmethod
+    def discard():
+        pass
+
+    @abstractmethod
+    def save():
+        pass
+
 
 class SQLiteRepo(ABCRepo):
     """Repository for handling session operations"""
@@ -86,6 +94,9 @@ class CsvRepo(ABCRepo):
     def update(self, id, row) -> None:
         data = self._data[id - 1]
         for key, value in row.items():
+            if not hasattr(data, key):
+                continue
+
             setattr(data, key, value)
 
     def delete(self, id) -> None:
