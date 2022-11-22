@@ -1,13 +1,15 @@
 import csv
 import os
 
+DATA_PATH = "/data"
+
 
 class CsvHandler:
     """Handler for creating, writing and reading csv files"""
 
     def __init__(self, filename: str, fieldnames: list[str]) -> None:
         self.fieldnames = fieldnames
-        self.file = f"data/{filename}.csv"
+        self.file = f"{DATA_PATH}/{filename}.csv"
         if not os.path.isfile(self.file):
             open(self.file, "x").close()
 
