@@ -71,7 +71,9 @@ represented still as a string, but instead in the format of `"<id> (<status>)"`.
 The biggest pain that I experienced during this project stems, not surprisingly, from my lack of decisiveness and planning early on in the project.
 Now while I can say this was made difficult as the requirements evolved weekly, setting on concrete goal earlier than week 4 would have helped
 massively. This is especially true when it comes to implementing tests, as my project's design was only finalized much too late I found myself having
-to completely scrap tests that were designed off of previous iterations before introducing my implementation of the repository pattern.
+to completely scrap tests that were designed off of previous iterations before introducing my implementation of the repository pattern. Currently input
+validation for the backend database is almost completely reliant on the frontend validating user input first. Ideally I would like this validation to be
+in place for the backend also, as this is where invalid user input can cause the most damage.
 
 ### Things I Would Like To Add
 
