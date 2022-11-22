@@ -1,23 +1,17 @@
 # Café Management CLI
 
-A **hopefully** somewhat simple CLI application to manage and track orders, products and couriers for a pop-up coffee shop.
+A somewhat simple CLI application to manage and track orders, products and couriers for a pop-up coffee shop.
 
 ## Current Features
 
-- Dynamic menu tree
-- CRUD operations for easy data management:
 - A traditional frontend utilizing [Typer](https://github.com/tiangolo/typer)
+- Data persistence using SQLite3 or CSV file format
+- CRUD operations for easy data management:
 
   - Create ✔
   - Read ✔
   - Update ✔
   - Delete ✔
-
-- Data persistence in CSV format
-
-## Dependencies
-
-- Python 3.10.7+
 
 # Installation
 
@@ -30,6 +24,10 @@ source ./<env>/bin/activate
 pip install -r requirements.txt
 ```
 
+### Dependencies
+
+- Python 3.10.7+
+
 # Usage
 
 ```sh
@@ -40,6 +38,51 @@ python3 app.py --help
 ![Help Example](https://i.ibb.co/k667yJK/cafe-help.png)
 
 ## Goals With This Project
+
+This CLI app was worked on over the course of 5 weeks with evolving requirements, the final week containing both week 5 and 6.
+For this reason I found this project vastly different to working on my own personal projects where time constraints and client
+requirements are up to my own discretion.
+
+### Design Choices
+
+My primary goal when approaching this project was to design my software to be modular. As in I could, rather seamlessly, swap out
+functionality of the application as required. I originally wanted to have separate frontend interfaces to display this feature
+in action, but as the frontend was a lot more time consuming, I opted to approach this by instead swapping out the backend api following
+week 5 and 6 requirements.
+
+I used a repository pattern to design the core functionality of this application. I currently have two repositories that are both built from
+an abstract base, one for doing CRUD operations on and persisting to a SQLite database, and one for CSV files. Because these repositories are
+built off of an abstraction, it means that any frontend that uses the CSV repository, can also swap in the SQLite repository without changing
+anything but initializing a different repository. This is demonstrated in the application by using the `--csv` flag to switch to CSV file
+format.
+
+### Meeting Requirements & Time Constraints
+
+During the course of this project I was very undecided on what my application would like at the end, and because of this I ended up not just
+refactoring code but completely redesigning from the ground up to achieve my design choice. Because of this there is some **STRETCH** and
+**BONUS** goals that were not met, despite being relatively simple to implement.
+
+For base requirements my application meets them all except a single change in the final week. Where we went from using a string to represent an
+order status, to instead the status' ID as a foreign key to it's own table in the database. To work around this, the order status is stored and
+represented still as a string, but instead in the format of `"<id> (<status>)"`.
+
+### Areas To Improve
+
+The biggest pain that I experienced during this project stems, not surprisingly, from my lack of decisiveness and planning early on in the project.
+Now while I can say this was made difficult as the requirements evolved weekly, setting on concrete goal earlier than week 4 would have helped
+massively. This is especially true when it comes to implementing tests, as my project's design was only finalized much too late I found myself having
+to completely scrap tests that were designed off of previous iterations before introducing my implementation of the repository pattern.
+
+### Things I Would Like To Add
+
+Should time allow, I would love to package this project into it's own binary executable and upload it to allow for easy installation and use. One
+caveat however is that Python being an interpreted scripting language makes it harder to compile, and as such I need to do some learning on the
+topic.
+
+While out of scope for our CLI requirements, I think it would be nice to build a simple web application to further solidify my modular design choice.
+This would feature calls to the backend api which would be almost identical to how the CLI app is being used right now. Especially if I opt to create
+this backend using [FastAPI](https://github.com/tiangolo/fastapi), as our current frontend uses [Typer](https://github.com/tiangolo/typer) which is
+described as "FastAPI's little sibling".
 
 ### Requirements For Reference
 
