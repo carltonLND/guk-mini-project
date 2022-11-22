@@ -15,13 +15,10 @@ def product_default(
     ),
     csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
-    if csv:
-        setup_csv()
-    else:
-        setup_db()
-
     if ctx.invoked_subcommand is not None:
         return
+
+    product_repo = repo_setup(csv)
 
     product_list = product_repo.all()
     if not product_list:
@@ -41,7 +38,11 @@ def product_default(
 @product_app.command(
     "add", help="Interactive prompt to add a new product to the database."
 )
-def product_add():
+def product_add(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    product_repo = repo_setup(csv)
+
     name: str = typer.prompt("Name")
     price: float = ensure_float("Price")
     new_product = Product(name=name, price=price)
@@ -56,7 +57,11 @@ def product_add():
 @product_app.command(
     "update", help="Interactive prompt to update a product in the database."
 )
-def product_update():
+def product_update(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    product_repo = repo_setup(csv)
+
     product_list = product_repo.all()
     if not product_list:
         print("No Products!")
@@ -87,7 +92,11 @@ def product_update():
 @product_app.command(
     "delete", help="Interactive prompt to delete a product in the database."
 )
-def product_delete():
+def product_delete(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    product_repo = repo_setup(csv)
+
     product_list = product_repo.all()
     if not product_list:
         print("No Products!")
@@ -109,14 +118,9 @@ def product_delete():
     product_repo.save()
 
 
-def setup_csv():
-    global product_repo
-
-    product_repo = CsvRepo(Product, "products", ["id", "name", "price"])
-
-
-def setup_db():
-    global product_repo
+def repo_setup(csv: bool = False):
+    if csv:
+        return CsvRepo(Product, "products", ["id", "name", "price"])
 
     Session = create_lite_session()
-    product_repo = SQLiteRepo(Product, Session())
+    return SQLiteRepo(Product, Session())

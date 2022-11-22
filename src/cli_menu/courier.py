@@ -15,13 +15,10 @@ def courier_default(
     ),
     csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
-    if csv:
-        setup_csv()
-    else:
-        setup_db()
-
     if ctx.invoked_subcommand is not None:
         return
+
+    courier_repo = repo_setup(csv)
 
     courier_list = courier_repo.all()
     if not courier_list:
@@ -41,7 +38,11 @@ def courier_default(
 @courier_app.command(
     "add", help="Interactive prompt to add a new courier to the database."
 )
-def courier_add():
+def courier_add(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    courier_repo = repo_setup(csv)
+
     name: str = typer.prompt("Name")
     phone: int = ensure_int("Phone")
     new_courier = Courier(name=name, phone=phone)
@@ -55,7 +56,11 @@ def courier_add():
 @courier_app.command(
     "update", help="Interactive prompt to update a courier in the database."
 )
-def courier_update():
+def courier_update(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    courier_repo = repo_setup(csv)
+
     courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
@@ -86,7 +91,11 @@ def courier_update():
 @courier_app.command(
     "delete", help="Interactive prompt to delete a courier in the database."
 )
-def courier_delete():
+def courier_delete(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    courier_repo = repo_setup(csv)
+
     courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
@@ -108,14 +117,9 @@ def courier_delete():
     courier_repo.save()
 
 
-def setup_csv():
-    global courier_repo
-
-    courier_repo = CsvRepo(Courier, "couriers", ["id", "name", "phone"])
-
-
-def setup_db():
-    global courier_repo
+def repo_setup(csv: bool = False):
+    if csv:
+        return CsvRepo(Courier, "couriers", ["id", "name", "phone"])
 
     Session = create_lite_session()
-    courier_repo = SQLiteRepo(Courier, Session())
+    return SQLiteRepo(Courier, Session())

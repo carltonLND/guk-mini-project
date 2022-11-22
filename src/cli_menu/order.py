@@ -16,13 +16,10 @@ def order_default(
     ),
     csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
-    if csv:
-        setup_csv()
-    else:
-        setup_db()
-
     if ctx.invoked_subcommand is not None:
         return
+
+    _, _, order_repo = repo_setup(csv)
 
     order_list = order_repo.all()
     if not order_list:
@@ -44,7 +41,11 @@ def order_default(
 
 
 @order_app.command("add", help="Interactive prompt to add a new order to the database.")
-def order_add():
+def order_add(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    product_repo, courier_repo, order_repo = repo_setup(csv)
+
     courier_list = courier_repo.all()
     if not courier_list:
         print("No Couriers!")
@@ -80,7 +81,11 @@ def order_add():
 @order_app.command(
     "status", help="Interactive prompt to update an order's status in the database."
 )
-def order_status():
+def order_status(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    _, _, order_repo = repo_setup(csv)
+
     order_list = order_repo.all()
     if not order_list:
         print("No orders!")
@@ -107,7 +112,11 @@ def order_status():
 @order_app.command(
     "update", help="Interactive prompt to update an order in the database."
 )
-def order_update():
+def order_update(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    product_repo, courier_repo, order_repo = repo_setup(csv)
+
     order_list = order_repo.all()
     if not order_list:
         print("No orders!")
@@ -151,7 +160,11 @@ def order_update():
 @order_app.command(
     "delete", help="Interactive prompt to delete an order in the database."
 )
-def order_delete():
+def order_delete(
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
+):
+    _, _, order_repo = repo_setup(csv)
+
     order_list = order_repo.all()
     if not order_list:
         print("No orders!")
@@ -173,30 +186,29 @@ def order_delete():
     order_repo.save()
 
 
-def setup_csv():
-    global product_repo, courier_repo, order_repo
-
-    product_repo = CsvRepo(Product, "products", ["id", "name", "price"])
-    courier_repo = CsvRepo(Courier, "couriers", ["id", "name", "phone"])
-    order_repo = CsvRepo(
-        Order,
-        "orders",
-        [
-            "id",
-            "customer_name",
-            "customer_address",
-            "customer_phone",
-            "courier_id",
-            "item_ids",
-            "status",
-        ],
-    )
-
-
-def setup_db():
-    global product_repo, courier_repo, order_repo
+def repo_setup(csv: bool = False):
+    if csv:
+        return (
+            CsvRepo(Product, "products", ["id", "name", "price"]),
+            CsvRepo(Courier, "couriers", ["id", "name", "phone"]),
+            CsvRepo(
+                Order,
+                "orders",
+                [
+                    "id",
+                    "customer_name",
+                    "customer_address",
+                    "customer_phone",
+                    "courier_id",
+                    "item_ids",
+                    "status",
+                ],
+            ),
+        )
 
     Session = create_lite_session()
-    product_repo = SQLiteRepo(Product, Session())
-    courier_repo = SQLiteRepo(Courier, Session())
-    order_repo = SQLiteRepo(Order, Session())
+    return (
+        SQLiteRepo(Product, Session()),
+        SQLiteRepo(Courier, Session()),
+        SQLiteRepo(Order, Session()),
+    )
