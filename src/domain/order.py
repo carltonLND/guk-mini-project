@@ -1,12 +1,6 @@
 from enum import Enum
 
 
-class Status(Enum):
-    PREPARING = "Preparing"
-    ON_THE_WAY = "On the way"
-    DELIVERED = "Delivered"
-
-
 class Order:
     def __init__(
         self,
@@ -15,7 +9,7 @@ class Order:
         customer_phone: int,
         courier_id: int,
         item_ids: str,
-        status: str = Status.PREPARING.value,
+        status: str = "1 (Preparing)",
         id: int | None = None,
     ) -> None:
         self.customer_name = str(customer_name)

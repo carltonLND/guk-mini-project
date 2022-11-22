@@ -22,6 +22,8 @@ def ensure_int(prompt: str, options=None, default=None, show_default=False) -> i
         return choice
 
     for option in options:
+        if not hasattr(option, "id"):
+            return choice
         if choice == option.id:
             return choice
 
@@ -35,7 +37,8 @@ def select_status():
     for num, status in enumerate(choices, 1):
         print(f"{num}) {status}")
     print("0) Cancel")
-    return choices[ensure_int("Select status", options=choices) - 1]
+    choice = ensure_int("Select status", options=choices)
+    return f"{choice} ({choices[choice - 1]})"
 
 
 def select_courier(choices, default=None, show_default=False):
