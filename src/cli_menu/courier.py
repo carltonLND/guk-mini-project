@@ -75,6 +75,9 @@ def courier_update(
         raise typer.Abort()
 
     old_courier = courier_repo.get(courier_choice)
+    if not old_courier:
+        raise typer.Abort()
+
     changes = {
         "name": typer.prompt("Name", default=old_courier.name, show_default=True),
         "phone": ensure_int("Phone", default=old_courier.phone, show_default=True),

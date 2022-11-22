@@ -135,6 +135,9 @@ def order_update(
         raise typer.Abort()
 
     old_order = order_repo.get(order_choice)
+    if not old_order:
+        raise typer.Abort()
+
     changes = {
         "customer_name": typer.prompt(
             "Name", default=old_order.customer_name, show_default=True

@@ -76,6 +76,9 @@ def product_update(
         raise typer.Abort()
 
     old_product = product_repo.get(product_choice)
+    if not old_product:
+        raise typer.Abort()
+
     changes = {
         "name": typer.prompt("Name", default=old_product.name, show_default=True),
         "price": ensure_float("Price", default=old_product.price, show_default=True),
