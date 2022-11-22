@@ -6,12 +6,37 @@ A somewhat simple CLI application to manage and track orders, products and couri
 
 - A traditional frontend utilizing [Typer](https://github.com/tiangolo/typer)
 - Data persistence using SQLite3 or CSV file format
+- Imperative mapping to our domain made easy using [SQLAlchemy](https://www.sqlalchemy.org/)
+- Unit and integration testing powered by [pytest](https://docs.pytest.org/en/7.2.x/)
 - CRUD operations for easy data management:
 
   - Create ✔
   - Read ✔
   - Update ✔
   - Delete ✔
+
+#### Project File Structure
+
+<img align="right" width="auto" height="400" src="//i.ibb.co/52kCCGb/cafe-file-structure.png">
+
+##### data:
+
+- Contains persistent data storage for our CSVs and SQLite database
+
+##### src:
+
+- Directory for our source code, separated into their own modules
+- Our frontend directory for our cli menu logic
+- Database configuration such as table mapping
+- Where the domain objects are created and configured
+- Handler classes for handling filetypes such as CSV
+- Reusable utility functions for our frontend
+
+##### tests:
+
+- Directory for creating and running our tests using [pytest](https://docs.pytest.org/en/7.2.x/)
+- Integration testing to CSV and SQLite storage layers
+- Unit testing for our core logic focusing on control flow
 
 # Installation
 
