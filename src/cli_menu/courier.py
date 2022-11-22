@@ -10,8 +10,10 @@ courier_app = typer.Typer()
 @courier_app.callback(invoke_without_command=True)
 def courier_default(
     ctx: typer.Context,
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
-    csv: bool = typer.Option(False, "--csv"),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Print detailed information of each courier."
+    ),
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
     if csv:
         setup_csv()
@@ -36,7 +38,9 @@ def courier_default(
             print(f"{courier.id}) {courier.name}")
 
 
-@courier_app.command("add")
+@courier_app.command(
+    "add", help="Interactive prompt to add a new courier to the database."
+)
 def courier_add():
     name: str = typer.prompt("Name")
     phone: int = ensure_int("Phone")
@@ -48,7 +52,9 @@ def courier_add():
     courier_repo.save()
 
 
-@courier_app.command("update")
+@courier_app.command(
+    "update", help="Interactive prompt to update a courier in the database."
+)
 def courier_update():
     courier_list = courier_repo.all()
     if not courier_list:
@@ -77,7 +83,9 @@ def courier_update():
     courier_repo.save()
 
 
-@courier_app.command("delete")
+@courier_app.command(
+    "delete", help="Interactive prompt to delete a courier in the database."
+)
 def courier_delete():
     courier_list = courier_repo.all()
     if not courier_list:

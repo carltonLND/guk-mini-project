@@ -10,8 +10,10 @@ product_app = typer.Typer()
 @product_app.callback(invoke_without_command=True)
 def product_default(
     ctx: typer.Context,
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
-    csv: bool = typer.Option(False, "--csv"),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Print detailed information of each product."
+    ),
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
     if csv:
         setup_csv()
@@ -36,7 +38,9 @@ def product_default(
             print(f"{product.id}) {product.name}")
 
 
-@product_app.command("add")
+@product_app.command(
+    "add", help="Interactive prompt to add a new product to the database."
+)
 def product_add():
     name: str = typer.prompt("Name")
     price: float = ensure_float("Price")
@@ -49,7 +53,9 @@ def product_add():
     product_repo.save()
 
 
-@product_app.command("update")
+@product_app.command(
+    "update", help="Interactive prompt to update a product in the database."
+)
 def product_update():
     product_list = product_repo.all()
     if not product_list:
@@ -78,7 +84,9 @@ def product_update():
     product_repo.save()
 
 
-@product_app.command("delete")
+@product_app.command(
+    "delete", help="Interactive prompt to delete a product in the database."
+)
 def product_delete():
     product_list = product_repo.all()
     if not product_list:

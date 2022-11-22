@@ -11,8 +11,10 @@ order_app = typer.Typer()
 @order_app.callback(invoke_without_command=True)
 def order_default(
     ctx: typer.Context,
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
-    csv: bool = typer.Option(False, "--csv"),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Print detailed information of each order."
+    ),
+    csv: bool = typer.Option(False, "--csv", help="Work with data in CSV format."),
 ):
     if csv:
         setup_csv()
@@ -41,7 +43,7 @@ def order_default(
             print(f"{order.id}) {order.customer_name}\n - {order.status}")
 
 
-@order_app.command("add")
+@order_app.command("add", help="Interactive prompt to add a new order to the database.")
 def order_add():
     courier_list = courier_repo.all()
     if not courier_list:
@@ -75,7 +77,9 @@ def order_add():
     order_repo.save()
 
 
-@order_app.command("status")
+@order_app.command(
+    "status", help="Interactive prompt to update an order's status in the database."
+)
 def order_status():
     order_list = order_repo.all()
     if not order_list:
@@ -100,7 +104,9 @@ def order_status():
     order_repo.save()
 
 
-@order_app.command("update")
+@order_app.command(
+    "update", help="Interactive prompt to update an order in the database."
+)
 def order_update():
     order_list = order_repo.all()
     if not order_list:
@@ -142,7 +148,9 @@ def order_update():
     order_repo.save()
 
 
-@order_app.command("delete")
+@order_app.command(
+    "delete", help="Interactive prompt to delete an order in the database."
+)
 def order_delete():
     order_list = order_repo.all()
     if not order_list:

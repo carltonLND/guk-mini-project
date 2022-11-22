@@ -5,11 +5,23 @@ import typer
 
 from src.cli_menu import courier_app, order_app, product_app
 
-app = typer.Typer()
+app = typer.Typer(add_completion=False)
 
-app.add_typer(product_app, name="products")
-app.add_typer(courier_app, name="couriers")
-app.add_typer(order_app, name="orders")
+app.add_typer(
+    product_app,
+    name="products",
+    help="Display a list of products when executed without an additional command.",
+)
+app.add_typer(
+    courier_app,
+    name="couriers",
+    help="Display a list of couriers when executed without an additional command.",
+)
+app.add_typer(
+    order_app,
+    name="orders",
+    help="Display a list of orders when executed without an additional command.",
+)
 
 
 if __name__ == "__main__":
