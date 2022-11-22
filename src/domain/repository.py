@@ -107,7 +107,10 @@ class CsvRepo(ABCRepo):
         self._data.pop(id - 1)
 
     def get(self, id):
-        return self._data[id - 1]
+        try:
+            return self._data[id - 1]
+        except IndexError:
+            return None
 
     def all(self) -> list:
         return self._data
