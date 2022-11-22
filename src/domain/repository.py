@@ -1,6 +1,7 @@
 import copy
 from abc import ABC, abstractmethod
 
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from src.file_handlers import CsvHandler
@@ -43,8 +44,8 @@ class ABCRepo(ABC):
 class SQLiteRepo(ABCRepo):
     """Repository for handling session operations"""
 
-    def __init__(self, table, session: Session) -> None:
-        self.table = table
+    def __init__(self, database, session: Session) -> None:
+        self.database = database
         self.session = session
 
     def add(self, row) -> None:
@@ -53,19 +54,22 @@ class SQLiteRepo(ABCRepo):
 
     def update(self, id, row):
         """Updates row with new changes"""
-        self.session.query(self.table).filter_by(id=id).update(row)
+        self.session.query(self.database).filter_by(id=id).update(row)
 
     def delete(self, id: int):
         """Deletes row in table by unique ID"""
-        self.session.query(self.table).filter_by(id=id).delete()
+        self.session.query(self.database).filter_by(id=id).delete()
 
     def get(self, id: int):
         """Returns row in table based on filter reference"""
-        return self.session.query(self.table).filter_by(id=id).one()
+        try:
+            return self.session.query(self.database).filter_by(id=id).one()
+        except NoResultFound:
+            return None
 
     def all(self) -> list:
         """Returns list of all rows in table, or empty list"""
-        return self.session.query(self.table).all()
+        return self.session.query(self.database).all()
 
     def save(self) -> None:
         """Commit transaction changes to database"""
