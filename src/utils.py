@@ -38,6 +38,9 @@ def select_status():
         print(f"{num}) {status}")
     print("0) Cancel")
     choice = ensure_int("Select status", options=choices)
+    if choice == 0:
+        return choice
+
     return f"{choice} ({choices[choice - 1]})"
 
 
