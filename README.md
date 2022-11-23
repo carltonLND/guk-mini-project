@@ -34,13 +34,13 @@ A somewhat simple CLI application to manage and track orders, products and couri
 
 ##### tests:
 
-- Directory for creating and running our tests using [pytest](https://i.ibb.co/JyzT3XB/cafe-testing.png)
+- Directory for creating and running our tests using [pytest](https://docs.pytest.org/en/7.2.x/)
 - Integration testing to CSV and SQLite storage layers
 - Unit testing for our core logic focusing on control flow
 
 #### Testing
 
-![Testing](https://i.ibb.co/D9QkbfW/cafe-testing.png)
+![Testing](https://i.ibb.co/JyzT3XB/cafe-testing.png)
 
 # Installation
 
