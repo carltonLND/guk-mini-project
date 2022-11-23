@@ -1,4 +1,0 @@
-TODO:
-    - Get some tests on the final build!
-    - Try and package application and setup automated testing with
-      github actions
