@@ -40,7 +40,7 @@ A somewhat simple CLI application to manage and track orders, products and couri
 
 #### Testing
 
-![Testing](https://i.ibb.co/JyzT3XB/cafe-testing.png)
+![Testing](https://i.ibb.co/TbWWT6K/cafe-testing.png)
 
 # Installation
 
