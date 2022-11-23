@@ -38,6 +38,10 @@ A somewhat simple CLI application to manage and track orders, products and couri
 - Integration testing to CSV and SQLite storage layers
 - Unit testing for our core logic focusing on control flow
 
+#### Testing
+
+![Testing](https://i.ibb.co/D9QkbfW/cafe-testing.png)
+
 # Installation
 
 ```
