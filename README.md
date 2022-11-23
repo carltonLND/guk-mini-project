@@ -34,7 +34,7 @@ A somewhat simple CLI application to manage and track orders, products and couri
 
 ##### tests:
 
-- Directory for creating and running our tests using [pytest](https://docs.pytest.org/en/7.2.x/)
+- Directory for creating and running our tests using [pytest](https://i.ibb.co/JyzT3XB/cafe-testing.png)
 - Integration testing to CSV and SQLite storage layers
 - Unit testing for our core logic focusing on control flow
 
@@ -64,7 +64,7 @@ pip install -r requirements.txt
 
 ```
 
-![Help Example](https://i.ibb.co/rwCWRrQ/cafe-testing.png)
+![Help Example](https://i.ibb.co/PT0nssY/cafe-help.png)
 
 ## Goals With This Project
 
