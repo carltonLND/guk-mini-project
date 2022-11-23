@@ -60,11 +60,11 @@ pip install -r requirements.txt
 # Usage
 
 ```sh
-python3 app.py --help
+./cafe --help
 
 ```
 
-![Help Example](https://i.ibb.co/k667yJK/cafe-help.png)
+![Help Example](https://i.ibb.co/rwCWRrQ/cafe-testing.png)
 
 ## Goals With This Project
 
