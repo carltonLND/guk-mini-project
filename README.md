@@ -17,7 +17,7 @@ A somewhat simple CLI application to manage and track orders, products and couri
 
 #### Project File Structure
 
-<img align="right" width="auto" height="400" src="//i.ibb.co/52kCCGb/cafe-file-structure.png">
+<img align="right" width="auto" height="400" src="https://i.ibb.co/52kCCGb/cafe-file-structure.png">
 
 ##### data:
 
