@@ -99,11 +99,7 @@ def order_status(
     if not order_choice:
         raise typer.Abort()
 
-    new_status = select_status()
-    if not new_status:
-        raise typer.Abort()
-
-    changes = {"status": new_status}
+    changes = {"status": select_status()}
 
     order_repo.update(order_choice, changes)
     if not confirm():

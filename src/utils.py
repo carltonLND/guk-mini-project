@@ -14,16 +14,29 @@ def ensure_float(prompt: str, default=None, show_default=False) -> float:
 
 
 def ensure_int(prompt: str, options=None, default=None, show_default=False) -> int:
-    choice = int(
-        typer.prompt(prompt, default=default, show_default=show_default, type=int)
-    )
+    choice = typer.prompt(prompt, default=default, show_default=show_default, type=int)
+
+    try:
+        choice = int(choice)
+    except ValueError:
+        return ensure_int(
+            prompt, options=options, default=default, show_default=show_default
+        )
 
     if not choice or not options:
         return choice
 
     for option in options:
         if not hasattr(option, "id"):
-            return choice
+            try:
+                options[choice - 1]
+            except IndexError:
+                return ensure_int(
+                    prompt, options=options, default=default, show_default=show_default
+                )
+            else:
+                return choice
+
         if choice == option.id:
             return choice
 
@@ -38,8 +51,8 @@ def select_status():
         print(f"{num}) {status}")
     print("0) Cancel")
     choice = ensure_int("Select status", options=choices)
-    if choice == 0:
-        return choice
+    if not choice:
+        raise typer.Abort()
 
     return f"{choice} ({choices[choice - 1]})"
 
